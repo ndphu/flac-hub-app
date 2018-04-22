@@ -1,0 +1,8 @@
+---
+applications:
+- name: flac-hub-app
+  memory: 32M
+  instances: 1
+  command: flac-hub-app
+  random-route: true
+

@@ -1,0 +1,45 @@
+body {
+  margin: 0;
+  padding: 0;
+  color: rgb(97, 97, 97) !important;
+  background-color: #eeeeee;
+  font-family: Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+.c-track-container {
+  padding: 16px 16px;
+  margin-top: 8px;
+}
+
+.c-track-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: rgb(97, 97, 97);
+  cursor: pointer;
+  display: block;
+}
+
+.c-track-artist {
+  font-size: 14px;
+  display: block;
+  padding-top: 7px;
+}
+
+.c-track-quality {
+  font-size: 14px;
+  display: inline-block;
+  padding-top: 7px;
+}
+
+.c-track-duration {
+  font-size: 14px;
+}
+
+.c-track-download-container {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+}
+.c-track-download-link {
+  margin-right: 8px;
+}
