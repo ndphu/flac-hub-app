@@ -1,5 +1,5 @@
-import {blue500, orange800} from 'material-ui/styles/colors';
-import {blue600, blue900, grey900} from 'material-ui/styles/colors';
+import {orange800} from 'material-ui/styles/colors';
+import {grey900} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const themeDefault = getMuiTheme({

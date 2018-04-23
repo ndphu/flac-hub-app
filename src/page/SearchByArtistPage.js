@@ -1,11 +1,13 @@
 import {RaisedButton} from 'material-ui';
+import {TextField} from 'material-ui';
 import React from 'react';
-import searchService from '../service/SearchService';
-import loader from '../component/Loader';
 import Track from '../component/Track';
 import itemService from '../service/ItemService';
+import navigationService from '../service/NavigationService';
+import searchService from '../service/SearchService';
+import loader from '../component/Loader';
 
-class SearchPage extends React.Component {
+class SearchByArtistPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,27 +16,34 @@ class SearchPage extends React.Component {
       page: 1,
       hasMore: false,
     };
+    this.handleItemClick.bind(this);
     this.onLoadMoreClick.bind(this);
   }
   
   componentDidMount = () => {
-    const query = decodeURIComponent(this.props.match.params.query);
-    this.search(query, 1);
-  };
-  
-  componentWillReceiveProps = (nextProps) => {
-    const nextQuery = decodeURIComponent(nextProps.match.params.query);
-    
-    if (this.state.query !== nextQuery) {
-      this.search(nextQuery, 1);
+    const query = this.props.match.params.query;
+    if (query) {
+      this.searchArtist(decodeURIComponent(query), 1);
     }
   };
   
-  onLoadMoreClick = () => {
-    this.search(this.state.query, this.state.page + 1);
+  componentWillReceiveProps = (nextProps) => {
+    const nextQuery = nextProps.match.params.query;
+    if (nextQuery && decodeURIComponent(nextQuery) !== this.state.query) {
+      this.searchArtist(nextQuery, 1);
+    }
   };
   
-  search = (query, page) => {
+  onKeyPress = (e) => {
+    e.target.setAttribute('maxlength', 128);
+    const query = e.target.value.trim();
+    if (e.key === 'Enter' && query) {
+      navigationService.goToArtistSearch(query);
+    }
+  };
+  
+  
+  searchArtist = (query, page) => {
     loader.show();
     if (page === 1) {
       this.setState({
@@ -42,7 +51,7 @@ class SearchPage extends React.Component {
         hasMore: false,
       })
     }
-    searchService.search(query, page).then((result) => {
+    searchService.searchByArtist(query, page).then(result => {
       this.setState({
         tracks: this.state.tracks.concat(result),
         query: query,
@@ -50,7 +59,7 @@ class SearchPage extends React.Component {
         hasMore: result.length >= 25,
       });
       loader.hide();
-    })
+    });
   };
   
   handleItemClick = (item) => {
@@ -66,11 +75,17 @@ class SearchPage extends React.Component {
     });
   };
   
+  onLoadMoreClick = () => {
+    this.searchArtist(this.state.query, this.state.page + 1);
+  };
   
   render = () => {
     return (
       <div>
-        <h3>Search result for <span style={{color: 'crimson'}}>{this.state.query}</span></h3>
+        <TextField hintText={'Artist Name'}
+                   value={this.state.query}
+                   onKeyPress={this.onKeyPress}/>
+        {this.state.query && <h3>Search result for <span style={{color: 'crimson'}}>{this.state.query}</span></h3>}
         {this.state.tracks.map(track => {
           return <Track
             onItemClick={this.handleItemClick}
@@ -89,5 +104,4 @@ class SearchPage extends React.Component {
   }
 }
 
-
-export default SearchPage;
+export default SearchByArtistPage;

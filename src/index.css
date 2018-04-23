@@ -13,32 +13,45 @@ body {
 
 .c-track-title {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 17px;
   color: rgb(97, 97, 97);
   cursor: pointer;
   display: block;
 }
 
+.c-track-title:hover {
+  text-decoration: underline;
+}
+
+.c-track-artist-container {
+  display: block;
+  padding-top: 2px;
+}
+
 .c-track-artist {
   font-size: 14px;
-  display: block;
-  padding-top: 7px;
+  display: inline-block;
+  cursor: pointer;
+}
+.c-track-artist:hover {
+  text-decoration: underline;
 }
 
 .c-track-quality {
-  font-size: 14px;
+  font-size: 12px;
   display: inline-block;
-  padding-top: 7px;
+  padding-top: 2px;
 }
 
 .c-track-duration {
-  font-size: 14px;
+  font-size: 12px;
+  padding-top: 2px;
 }
 
 .c-track-download-container {
   display: block;
   margin-top: 4px;
-  font-size: 13px;
+  font-size: 12px;
 }
 .c-track-download-link {
   margin-right: 8px;

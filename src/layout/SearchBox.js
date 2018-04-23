@@ -5,6 +5,7 @@ import {white, orange400} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import Search from 'material-ui/svg-icons/action/search';
 import navigatorService from '../service/NavigationService';
+import {replaceAll} from '../utils/StringUtils';
 
 const styles = {
   iconButton: {
@@ -40,7 +41,7 @@ class SearchBox extends React.Component {
     e.target.setAttribute('maxlength', 128);
     const query = e.target.value.trim();
     if (e.key === 'Enter' && query) {
-      navigatorService.goToSearch(query);
+      navigatorService.goToSearch(replaceAll(query, '/', '%2F'));
     }
   };
 

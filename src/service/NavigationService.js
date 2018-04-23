@@ -8,8 +8,16 @@ class NavigationService {
   };
 
   goToSearch(query) {
-    this.history.push(`/search/q/${query}/page/1`);
+    this.history.push(`/search/q/${query}`);
 
+  }
+  
+  goToArtistSearch(query) {
+    if (query) {
+      this.history.push(`/search/byArtist/${encodeURIComponent(query)}`);
+    } else {
+      this.history.push('/search/byArtist');
+    }
   }
 }
 
