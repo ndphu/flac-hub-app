@@ -83,7 +83,7 @@ class SearchByArtistPage extends React.Component {
     return (
       <div>
         <TextField hintText={'Artist Name'}
-                   value={this.state.query}
+                   defaultValue={this.state.query}
                    onKeyPress={this.onKeyPress}/>
         {this.state.query && <h3>Search result for <span style={{color: 'crimson'}}>{this.state.query}</span></h3>}
         {this.state.tracks.map(track => {
