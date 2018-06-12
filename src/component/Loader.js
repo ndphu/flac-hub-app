@@ -1,16 +1,20 @@
+const Nanobar = require('nanobar')
+
 class Loader {
   constructor() {
-    this.loadScreen = document.getElementById('load-screen');
+    const options = {
+      classname: 'nano-bar',
+    };
+  
+    this.nanobar = new Nanobar(options);
   }
 
   show = () => {
-    this.loadScreen.style.display = 'block';
-    this.loadScreen.style.visibility = 'visible';
+    this.nanobar.go(90)
   };
 
   hide = () => {
-    this.loadScreen.style.display = 'none';
-    this.loadScreen.style.visibility = 'hidden';
+    this.nanobar.go(100)
   };
 }
 
