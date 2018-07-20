@@ -36,6 +36,9 @@ class SearchPage extends React.Component {
   
   search = (query, page) => {
     loader.show();
+    this.setState({
+      query: query,
+    });
     if (page === 1) {
       this.setState({
         tracks: [],
@@ -71,10 +74,10 @@ class SearchPage extends React.Component {
     return (
       <div>
         <h3>Search result for <span style={{color: 'crimson'}}>{this.state.query}</span></h3>
-        {this.state.tracks.map(track => {
+        {this.state.tracks.map((track, i) => {
           return <Track
             onItemClick={this.handleItemClick}
-            key={'track-' + track.link}
+            key={'track-' + i}
             item={track}
           />
         })}

@@ -37,18 +37,36 @@ const styles = {
 };
 
 class SearchBox extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentQuery: ""
+    };
+  }
+  
   onSearchKeyPress = (e) => {
     e.target.setAttribute('maxlength', 128);
     const query = e.target.value.trim();
-    if (e.key === 'Enter' && query) {
-      navigatorService.goToSearch(replaceAll(query, '/', '%2F'));
+    if (e.key === 'Enter') {
+      if (query) {
+        navigatorService.goToSearch(replaceAll(query, '/', '%2F'));
+      }
+    } else {
+      this.setState({currentQuery: query + e.key});
+    }
+  };
+  
+  searchCurrentQuery = () => {
+    if (this.state.currentQuery) {
+      navigatorService.goToSearch(replaceAll(this.state.currentQuery, '/', '%2F'));
     }
   };
 
   render = () => {
     return (
       <div style={styles.containerStyle}>
-        <IconButton style={styles.iconButton}>
+        <IconButton style={styles.iconButton} onClick={() => {this.searchCurrentQuery();}}>
           <Search color={white}/>
         </IconButton>
         <TextField

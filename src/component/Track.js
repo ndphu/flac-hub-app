@@ -30,6 +30,7 @@ class Track extends React.Component {
         <span className={'c-track-artist-container'}>
           {item.artist.split(';').map((e, i ,arr) =>
               <span className={'c-track-artist'}
+                    key={'track-artist-' + e}
                     onClick={() => navigationService.goToArtistSearch(e)}>{e}
                 {i < arr.length - 1 && <span>{', '}</span>}</span>
           )}
@@ -43,6 +44,7 @@ class Track extends React.Component {
             return (
               <a className={'c-track-download-link'}
                  href={source.source}
+                 key={"track-download-link-" + source.source}
                  target="_blank">{source.quality}</a>
             )
           })}
