@@ -81,7 +81,7 @@ class LeftDrawer extends React.Component {
         docked={true}
         open={this.state.navDrawerOpen}>
         <div style={styles.logo}>
-          FLAG Hub
+          FLAC Hub
         </div>
         <div style={{display: 'flex', maxHeight: 450}}>
           <List style={{width: '100%'}}>
