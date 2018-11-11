@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from 'material-ui/TextField';
-import {white, orange400} from 'material-ui/styles/colors';
+import {white, blue500} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import Search from 'material-ui/svg-icons/action/search';
 import navigatorService from '../service/NavigationService';
@@ -14,7 +14,7 @@ const styles = {
   },
   textField: {
     color: white,
-    backgroundColor: orange400,
+    backgroundColor: blue500,
     borderRadius: 2,
     maxHeight: 24,
     padding: 5,

@@ -1,8 +1,7 @@
 import {List, ListItem} from 'material-ui';
 import Drawer from 'material-ui/Drawer';
 import {typography} from 'material-ui/styles';
-import {orange500} from 'material-ui/styles/colors';
-import {grey300, orange800} from 'material-ui/styles/colors';
+import {grey300, blue500} from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -13,7 +12,7 @@ const styles = {
     fontSize: 22,
     color: typography.textFullWhite,
     fontWeight: typography.fontWeightLight,
-    backgroundColor: orange800,
+    backgroundColor: blue500,
     paddingLeft: 40,
     paddingTop: 12,
     height: 42,
@@ -39,7 +38,7 @@ function getListItem(menu, index, isSubmenu) {
     leftIcon={isSubmenu ? null : menu.icon}
     nestedItems={childItems}
     primaryTogglesNestedList={true}
-    hoverColor={orange500}
+    hoverColor={blue500}
     onClick={menu.onClick}
   />;
 }

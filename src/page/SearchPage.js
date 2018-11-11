@@ -4,6 +4,7 @@ import searchService from '../service/SearchService';
 import loader from '../component/Loader';
 import Track from '../component/Track';
 import itemService from '../service/ItemService';
+import Button from '@material-ui/core/Button/Button';
 
 class SearchPage extends React.Component {
   constructor(props) {
@@ -59,12 +60,8 @@ class SearchPage extends React.Component {
   handleItemClick = (item) => {
     loader.show();
     itemService.getItemSources(item).then(sources => {
-      const index = this.state.tracks.map(track => track.link).indexOf(item.link);
-      const tracks = this.state.tracks.slice();
-      tracks[index].sources = sources;
-      this.setState({
-        tracks: tracks
-      });
+      item.sources = sources;
+      this.setState({});
       loader.hide()
     });
   };
@@ -74,6 +71,7 @@ class SearchPage extends React.Component {
     return (
       <div>
         <h3>Search result for <span style={{color: 'crimson'}}>{this.state.query}</span></h3>
+
         {this.state.tracks.map((track, i) => {
           return <Track
             onItemClick={this.handleItemClick}

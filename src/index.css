@@ -7,7 +7,6 @@ body {
 }
 
 .c-track-container {
-  padding: 16px 16px;
   margin-top: 8px;
 }
 
@@ -57,6 +56,18 @@ body {
   margin-right: 8px;
 }
 
+.c-track-details-container {
+  display: inline-block;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+.c-track-playlist-checkbox {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 16px;
+}
+
 .nano-bar {
   width: 100%;
   height: 5px;
@@ -68,4 +79,28 @@ body {
   height: 100%;
   transition: width 3s;
   background: #42A5F5;
+}
+
+
+.c-playlist-container {
+  padding: 16px 16px;
+  margin-top: 8px;
+}
+
+.c-playlist-title {
+  font-weight: 600;
+  font-size: 17px;
+  color: rgb(97, 97, 97);
+  cursor: pointer;
+  display: block;
+}
+
+.c-playlist-title:hover {
+  text-decoration: underline;
+}
+
+.c-toolbar-container button {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  margin-right: 8px;
 }

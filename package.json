@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "3.4.0",
+    "@material-ui/icons": "3.0.1",
     "immutability-helper": "^2.6.6",
     "jwt-decode": "latest",
     "material-ui": "^0.20.0",

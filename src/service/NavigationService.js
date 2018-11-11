@@ -19,6 +19,14 @@ class NavigationService {
       this.history.push('/search/byArtist');
     }
   }
+
+  goToPlaylist(id) {
+    if (id) {
+      this.history.push(`/playlist/${id}`)
+    } else {
+      this.history.push(`/playlist`)
+    }
+  }
 }
 
 const navigationService = new NavigationService();
