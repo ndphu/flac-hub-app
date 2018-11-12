@@ -77,7 +77,7 @@ class SearchPage extends React.Component {
         {this.state.tracks.map((track, i) => {
           return <Track
             onItemClick={this.handleItemClick}
-            key={'track-' + i}
+            key={'track-' + track.link}
             item={track}
           />
         })}
