@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {HashRouter, Route} from 'react-router-dom'
 import navigationService from './service/NavigationService';
 import AppRoutes from './AppRoutes';
-import AppLayout from './layout/AppLayout';
+import AppContainer from "./layout/AppContainer";
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +27,7 @@ class App extends Component {
         <Route path={'/'} render={(props) => {
           navigationService.setLocation(props.location);
           navigationService.setHistory(props.history);
-          return <AppLayout children={<AppRoutes/>}/>
+          return <AppContainer children={<AppRoutes/>}/>
         }}/>
       </HashRouter>
     );

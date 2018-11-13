@@ -1,8 +1,8 @@
 ---
 applications:
-- name: flac-hub-app
+- name: flachub-beta
   memory: 16M
   instances: 1
-  command: flac-hub-app
+  command: flachub-beta
   random-route: true
 
