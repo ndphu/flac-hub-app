@@ -4,6 +4,7 @@ import Playlist from "../component/Playlist"
 import api from '../api/Api';
 import playlistService from '../service/PlaylistService';
 import PlaylistExpansion from "./PlaylistExpansion";
+import Typography from '@material-ui/core/Typography/Typography';
 
 class PlaylistPage extends React.Component {
     constructor(props) {
@@ -26,15 +27,12 @@ class PlaylistPage extends React.Component {
     render = () => {
         return (
             <div>
-                <h1>Your Playlist</h1>
-                <div>
                     {this.state.playlists && this.state.playlists.map((playlist, i) => {
                         return (
                             <PlaylistExpansion playlist={playlist}
                                                key={`${playlist._id}`}>
                             </PlaylistExpansion>)
                     })}
-                </div>
             </div>
         )
     }

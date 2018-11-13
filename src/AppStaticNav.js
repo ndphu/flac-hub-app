@@ -1,6 +1,6 @@
 import {grey300} from 'material-ui/styles/colors';
-import ActionSearch from 'material-ui/svg-icons/action/search';
-import Album from 'material-ui/svg-icons/av/album';
+import ActionSearch from '@material-ui/icons/Search';
+import Album from '@material-ui/icons/Album';
 import React from 'react';
 import navigationService from './service/NavigationService';
 
