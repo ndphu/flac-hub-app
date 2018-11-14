@@ -1,9 +1,9 @@
 import React from 'react';
 import Button from '@material-ui/core/Button/Button';
 import AddToPlaylistDialog from '../page/AddToPlaylistDialog';
-import Track from '../component/Track';
+import Track from './Track';
 import withStyles from '@material-ui/core/styles/withStyles';
-import loader from '../component/Loader';
+import loader from './Loader';
 import playlistService from '../service/PlaylistService';
 import itemService from '../service/ItemService';
 

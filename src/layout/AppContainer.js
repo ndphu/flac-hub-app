@@ -149,8 +149,6 @@ class AppContainer extends React.Component {
 
     const drawer = (
       <div>
-        <div className={classes.toolbar}/>
-        <Divider/>
         <List>
           {staticNav.map((item, index) => (
             <ListItem button
@@ -162,15 +160,13 @@ class AppContainer extends React.Component {
             </ListItem>
           ))}
         </List>
-        <Divider/>
-        <List/>
       </div>
     );
     return (
       <div className={classes.root}>
         <CssBaseline/>
         <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
+          <Toolbar variant={"dense"}>
             <IconButton
               color="inherit"
               aria-label="Open drawer"

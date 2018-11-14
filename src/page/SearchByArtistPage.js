@@ -9,6 +9,7 @@ import AddToPlaylistDialog from './AddToPlaylistDialog';
 import playlistService from "../service/PlaylistService";
 import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
+import TrackList from "../component/TrackList";
 
 const styles = theme => ({});
 
@@ -123,34 +124,27 @@ class SearchByArtistPage extends React.Component {
   };
 
   render = () => {
+    const {tracks} = this.state;
+
     return (
       <div>
         <TextField placeholder={'Artist Name'}
                    defaultValue={this.state.query}
                    onKeyPress={this.onKeyPress}/>
         {this.state.query &&
-        <h3>Search result for <span style={{color: 'crimson'}}>{this.state.query}</span></h3>}
-        {this.state.tracks.length > 0 &&
-        <div className={'c-toolbar-container'}>
-          <Button variant={'contained'} onClick={this.handleSelectAll}>Select All</Button>
-          <Button variant="contained" color='primary' disabled={!this.checkAnyItemSelected()}
-                  onClick={this.handleAddToPlaylistClick}>
-            Add To Playlist
-          </Button>
-          <AddToPlaylistDialog
-            open={this.state.open}
-            onCreateNewPlaylist={this.handleCreateNewPlaylist}
-            onClose={this.handleClose}
-          />
-        </div>}
-        {this.state.tracks.map((track, i) => {
-          return <Track
-            onItemClick={this.handleItemClick}
-            onItemSelected={this.handleItemSelected}
-            key={`track-${track.link}-${i}`}
-            item={track}
-          />
-        })}
+        <h5>Search result for <span style={{color: 'crimson'}}>{this.state.query}</span></h5>}
+
+        {/*{this.state.tracks.map((track, i) => {*/}
+          {/*return <Track*/}
+            {/*onItemClick={this.handleItemClick}*/}
+            {/*onItemSelected={this.handleItemSelected}*/}
+            {/*key={`track-${track.link}-${i}`}*/}
+            {/*item={track}*/}
+          {/*/>*/}
+        {/*})}*/}
+
+        <TrackList tracks={tracks}/>
+
         {this.state.hasMore &&
         <Button primary={true}
                 variant={'contained'}

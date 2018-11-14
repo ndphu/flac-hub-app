@@ -2,7 +2,7 @@ import React from 'react';
 import searchService from '../service/SearchService';
 import loader from '../component/Loader';
 import itemService from '../service/ItemService';
-import SearchResultList from '../layout/SearchResultList';
+import SearchResultList from '../component/SearchResultList';
 
 class SearchPage extends React.Component {
   constructor(props) {
