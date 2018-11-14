@@ -10,6 +10,8 @@ import playlistService from "../service/PlaylistService";
 import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
 import TrackList from "../component/TrackList";
+import TrackListTable from '../component/TrackListTable';
+import Hidden from '@material-ui/core/Hidden/Hidden';
 
 const styles = theme => ({});
 
@@ -131,26 +133,17 @@ class SearchByArtistPage extends React.Component {
         <TextField placeholder={'Artist Name'}
                    defaultValue={this.state.query}
                    onKeyPress={this.onKeyPress}/>
-        {this.state.query &&
-        <h5>Search result for <span style={{color: 'crimson'}}>{this.state.query}</span></h5>}
-
-        {/*{this.state.tracks.map((track, i) => {*/}
-          {/*return <Track*/}
-            {/*onItemClick={this.handleItemClick}*/}
-            {/*onItemSelected={this.handleItemSelected}*/}
-            {/*key={`track-${track.link}-${i}`}*/}
-            {/*item={track}*/}
-          {/*/>*/}
-        {/*})}*/}
-
-        <TrackList tracks={tracks}/>
-
+        <Hidden smUp implementation="css">
+          <TrackList tracks={tracks}/>
+        </Hidden>
+        <Hidden xsDown implementation="css">
+          <TrackListTable tracks={tracks}
+                          tableTitle={`Search result for ${this.state.query}`}/>
+        </Hidden>
         {this.state.hasMore &&
-        <Button primary={true}
-                variant={'contained'}
-                label={'MORE'}
+        <Button variant={'contained'}
                 style={{marginTop: 16, marginBottom: 16}}
-                onClick={this.onLoadMoreClick}/>
+                onClick={this.onLoadMoreClick}>More</Button>
         }
       </div>
     )

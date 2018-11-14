@@ -13,14 +13,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 import Hidden from "@material-ui/core/Hidden/Hidden";
 import Drawer from "@material-ui/core/Drawer/Drawer";
-import Divider from "@material-ui/core/Divider/Divider";
-import List from "@material-ui/core/List/List";
-import ListItem from "@material-ui/core/ListItem/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText/ListItemText";
-import staticNav from '../AppStaticNav';
 import navigatorService from '../service/NavigationService';
 import {replaceAll} from '../utils/StringUtils';
+import AppDrawer from './AppDrawer';
 
 const drawerWidth = 240;
 
@@ -145,22 +140,10 @@ class AppContainer extends React.Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const {classes, theme} = this.props;
 
     const drawer = (
-      <div>
-        <List>
-          {staticNav.map((item, index) => (
-            <ListItem button
-                      key={`item.text-${item.text}-${index}`}
-                      onClick={item.onClick}
-              >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text}/>
-            </ListItem>
-          ))}
-        </List>
-      </div>
+      <AppDrawer/>
     );
     return (
       <div className={classes.root}>
