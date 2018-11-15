@@ -62,7 +62,6 @@ class TrackList extends React.Component {
 
 TrackList.propTypes = {
   tracks: PropTypes.array.isRequired,
-  checkable: PropTypes.bool.isRequired,
 };
 
 

@@ -8,6 +8,15 @@ import TableCell from '@material-ui/core/TableCell/TableCell';
 import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import EnhancedTableToolbar from './table/EnhancedTableToolbar';
 import EnhancedTableHead from './table/EnhancedTableHead';
+import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText/DialogContentText';
+import TextField from '@material-ui/core/TextField/TextField';
+import DialogActions from '@material-ui/core/DialogActions/DialogActions';
+import Button from '@material-ui/core/Button/Button';
+import Dialog from '@material-ui/core/Dialog/Dialog';
+import loader from './Loader';
+import playlistService from '../service/PlaylistService';
 
 const styles = theme => ({
   root: {},
@@ -32,11 +41,13 @@ class TrackListTable extends React.Component {
   state = {
     selected: [],
     page: 0,
+    newPlaylistDialogOpen: false,
+
   };
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      this.setState(state => ({selected: this.props.tracks.map(n => n)}));
+      this.setState({selected: this.props.tracks.map(n => n)});
       return;
     }
     this.setState({selected: []});
@@ -65,13 +76,42 @@ class TrackListTable extends React.Component {
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
+  handleNewPlaylistDialogClose = () => {
+    this.setState({ newPlaylistDialogOpen: false });
+  };
+
+  handleSubmitNewPlaylist = () => {
+    this.setState({ newPlaylistDialogOpen: false });
+    const playlist = {
+      title: this.state.newPlaylistTitle,
+      shared: "shared",
+      tracks: this.state.selected,
+    };
+    loader.show();
+    playlistService.createPlaylist(playlist).then(created => {
+      console.log(created);
+      loader.hide();
+    })
+
+  };
+
+  handlePlaylistNameKeyUp = (e) => {
+    e.target.setAttribute('maxlength', 32);
+    const text = e.target.value.trim();
+    this.setState({newPlaylistTitle: text});
+    if (e.key === 'Enter' && text) {
+      this.handleSubmitNewPlaylist();
+    }
+  };
+
   render = () => {
     const {classes, tracks, tableTitle} = this.props;
-    const {selected,} = this.state;
+    const {selected, newPlaylistTitle} = this.state;
     return (
       <div className={classes.root}>
         <EnhancedTableToolbar numSelected={selected.length}
-                              toolbarDefaultText={tableTitle}/>
+                              toolbarDefaultText={tableTitle}
+                              onNewPlaylistClick={()=>{this.setState({newPlaylistDialogOpen: true})}}/>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -109,6 +149,34 @@ class TrackListTable extends React.Component {
               })}
             </TableBody>
           </Table>
+          <Dialog
+            open={this.state.newPlaylistDialogOpen}
+            onClose={this.handleNewPlaylistDialogClose}
+            aria-labelledby="form-dialog-title"
+            fullWidth
+          >
+            <DialogTitle id="form-dialog-title">New Playlist</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Enter the Playlist name
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                fullWidth
+                onKeyUp={this.handlePlaylistNameKeyUp}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleNewPlaylistDialogClose} color="default">
+                Cancel
+              </Button>
+              <Button onClick={this.handleSubmitNewPlaylist} color="primary"
+                      disabled={!newPlaylistTitle}>
+                Create
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </div>
     );

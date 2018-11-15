@@ -6,14 +6,18 @@ import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-const tableHeadStyle = theme => ({});
+const tableHeadStyle = theme => ({
+  headerRow: {
+    //backgroundColor: lighten(theme.palette.primary.light, 0.90)
+  }
+});
 
 class EnhancedTableHead extends React.Component {
   render() {
     const {onSelectAllClick, numSelected, rowCount, columns} = this.props;
-
+    const {classes} = this.props;
     return (
-      <TableHead>
+      <TableHead className={classes.headerRow}>
         <TableRow>
           <TableCell padding="checkbox">
             <Checkbox

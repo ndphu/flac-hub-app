@@ -149,7 +149,7 @@ class AppContainer extends React.Component {
       <div className={classes.root}>
         <CssBaseline/>
         <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar variant={"dense"}>
+          <Toolbar variant={"regular"}>
             <IconButton
               color="inherit"
               aria-label="Open drawer"

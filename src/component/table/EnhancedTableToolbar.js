@@ -1,14 +1,13 @@
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography/Typography';
-import Tooltip from '@material-ui/core/Tooltip/Tooltip';
-import IconButton from '@material-ui/core/IconButton/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import PropTypes from 'prop-types';
 import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import Button from '@material-ui/core/Button/Button';
+import Menu from '@material-ui/core/Menu/Menu';
+import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 
 const toolbarStyles = theme => ({
   root: {
@@ -30,6 +29,9 @@ const toolbarStyles = theme => ({
   actions: {
     color: theme.palette.text.secondary,
   },
+  addPlaylist: {
+    width: 140,
+  },
   title: {
     flex: '0 0 auto',
   },
@@ -37,43 +39,68 @@ const toolbarStyles = theme => ({
 
 
 class EnhancedTableToolbar extends React.Component {
-  render = () => {
+  state = {
+    anchorEl: null,
+    open: false,
+  };
 
+  handleAddToExisting = () => {
+    this.setState({ anchorEl: null });
+  };
+
+  handleSelectCreateNew = () => {
+    this.setState({ anchorEl: null });
+    this.props.onNewPlaylistClick();
+  };
+
+  handleClick = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  render = () => {
+    const { anchorEl } = this.state;
     const {numSelected, classes, toolbarDefaultText} = this.props;
 
     return (
       <Toolbar
+        variant={'dense'}
         className={classNames(classes.root, {
           [classes.highlight]: numSelected > 0,
         })}
       >
         <div className={classes.title}>
           {numSelected > 0 ? (
-            <Typography color="inherit" variant="subtitle1">
+            <Typography color="inherit" variant="subtitle2">
               {numSelected} selected
             </Typography>
           ) : (
-            <Typography variant="h6" id="tableTitle">
+            <Typography variant="subtitle2" id="tableTitle">
               {toolbarDefaultText}
             </Typography>
           )}
         </div>
         <div className={classes.spacer}/>
         <div className={classes.actions}>
-          {numSelected > 0 ? (
-            <Tooltip title="Delete">
-              <IconButton aria-label="Delete">
-                <DeleteIcon/>
-              </IconButton>
-            </Tooltip>
-          ) : (
-            <Tooltip title="Filter list">
-              <IconButton aria-label="Filter list">
-                <FilterListIcon/>
-              </IconButton>
-            </Tooltip>
+          {numSelected > 0 && (
+            <Button variant={'contained'}
+                    color={'secondary'}
+                    size={'small'}
+                    className={classes.addPlaylist}
+                    aria-owns={anchorEl ? 'simple-menu' : undefined}
+                    aria-haspopup="true"
+                    onClick={this.handleClick}
+            >Create Playlist</Button>
           )}
         </div>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.handleClose}
+        >
+          <MenuItem onClick={this.handleSelectCreateNew}>Create New</MenuItem>
+          <MenuItem onClick={this.handleAddToExisting}>Add To Existing Playlist</MenuItem>
+        </Menu>
       </Toolbar>
     );
   };

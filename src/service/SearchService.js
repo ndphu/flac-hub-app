@@ -8,6 +8,10 @@ class SearchService {
   searchByArtist = (query, page) => {
     return api.get(`/search/byArtist/${btoa(unescape(encodeURIComponent(query)))}/tracks?page=${page}`)
   };
+
+  searchByAlbum(query, page) {
+    return api.get(`/search/byAlbum/${btoa(unescape(encodeURIComponent(query)))}/tracks?page=${page}`)
+  }
 }
 
 const searchService = new SearchService();
