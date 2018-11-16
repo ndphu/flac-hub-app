@@ -10,7 +10,7 @@ const AppRoutes = () => {
       <Route path={'/home'} component={HomePage}/>
       <Route path={'/search/q/:query'} component={SearchPage}/>
       <Route path={'/playlist/'} component={PlaylistPage}/>
-      <Redirect exact={true} from={'/'} to={'/home'}/>
+      <Redirect exact={true} from={'/'} to={'/playlist'}/>
     </Switch>
   );
 };

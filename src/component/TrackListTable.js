@@ -92,6 +92,13 @@ class TrackListTable extends React.Component {
       console.log(created);
       loader.hide();
     })
+  };
+
+  handlePlayAllClick = () => {
+    
+  };
+
+  handlePlaySelectedClick = () => {
 
   };
 
@@ -111,7 +118,10 @@ class TrackListTable extends React.Component {
       <div className={classes.root}>
         <EnhancedTableToolbar numSelected={selected.length}
                               toolbarDefaultText={tableTitle}
-                              onNewPlaylistClick={()=>{this.setState({newPlaylistDialogOpen: true})}}/>
+                              onNewPlaylistClick={()=>{this.setState({newPlaylistDialogOpen: true})}}
+                              onPlayAllClick={this.handlePlayAllClick}
+                              onPlaySelectedClick={this.handlePlaySelectedClick}
+        />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
