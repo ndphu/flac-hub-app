@@ -16,8 +16,11 @@ import Drawer from "@material-ui/core/Drawer/Drawer";
 import navigatorService from '../service/NavigationService';
 import {replaceAll} from '../utils/StringUtils';
 import AppDrawer from './AppDrawer';
+import Paper from '@material-ui/core/Paper';
+import PlayerComponent from '../component/player/PlayerComponent';
 
 const drawerWidth = 240;
+const playerSmallHeight = 86;
 
 const styles = theme => ({
   root: {
@@ -51,6 +54,7 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
+    marginBottom: playerSmallHeight,
   },
   toolbar: theme.mixins.toolbar,
   title: {
@@ -110,6 +114,16 @@ const styles = theme => ({
       display: 'none',
     },
   },
+
+  playerSmall : {
+    position: 'fixed',
+    height: playerSmallHeight,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: theme.zIndex.drawer + 1,
+    backgroundColor: theme.palette.common.white,
+  }
 });
 
 class AppContainer extends React.Component {
@@ -220,6 +234,11 @@ class AppContainer extends React.Component {
           <div className={classes.toolbar}/>
           {this.props.children}
         </main>
+        <Paper className={classes.playerSmall}
+               elevation={12}
+               square={false}>
+          <PlayerComponent/>
+        </Paper>
       </div>
     );
   }

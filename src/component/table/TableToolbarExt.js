@@ -46,7 +46,7 @@ const toolbarStyles = theme => ({
 });
 
 
-class EnhancedTableToolbar extends React.Component {
+class TableToolbarExt extends React.Component {
     state = {
         anchorEl: null,
         open: false,
@@ -130,11 +130,11 @@ class EnhancedTableToolbar extends React.Component {
     };
 }
 
-EnhancedTableToolbar.propTypes = {
+TableToolbarExt.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired,
     toolbarDefaultText: PropTypes.string.isRequired,
 };
 
 
-export default withStyles(toolbarStyles)(EnhancedTableToolbar);
+export default withStyles(toolbarStyles)(TableToolbarExt);

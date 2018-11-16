@@ -12,25 +12,24 @@ const tableHeadStyle = theme => ({
   }
 });
 
-class EnhancedTableHead extends React.Component {
+class TableHeadExt extends React.Component {
   render() {
     const {onSelectAllClick, numSelected, rowCount, columns} = this.props;
     const {classes} = this.props;
     return (
       <TableHead className={classes.headerRow}>
         <TableRow>
-          <TableCell padding="checkbox">
+          <TableCell>
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected > 0 && numSelected === rowCount}
               onChange={onSelectAllClick}
             />
           </TableCell>
-          {columns.map(column => {
+          {columns.map((column,i) => {
             return (
               <TableCell
                 key={column.id}
-                padding="none"
               >
                 {column.label}
               </TableCell>
@@ -42,11 +41,11 @@ class EnhancedTableHead extends React.Component {
   }
 }
 
-EnhancedTableHead.propTypes = {
+TableHeadExt.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
   rowCount: PropTypes.number.isRequired,
   columns: PropTypes.array.isRequired,
 };
 
-export default withStyles(tableHeadStyle)(EnhancedTableHead);
+export default withStyles(tableHeadStyle)(TableHeadExt);

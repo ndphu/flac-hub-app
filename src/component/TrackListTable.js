@@ -6,8 +6,8 @@ import TableRow from '@material-ui/core/TableRow/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell/TableCell';
 import Checkbox from '@material-ui/core/Checkbox/Checkbox';
-import EnhancedTableToolbar from './table/EnhancedTableToolbar';
-import EnhancedTableHead from './table/EnhancedTableHead';
+import EnhancedTableToolbar from './table/TableToolbarExt';
+import EnhancedTableHead from './table/TableHeadExt';
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText/DialogContentText';
@@ -17,6 +17,9 @@ import Button from '@material-ui/core/Button/Button';
 import Dialog from '@material-ui/core/Dialog/Dialog';
 import loader from './Loader';
 import playlistService from '../service/PlaylistService';
+import IconButton from '@material-ui/core/IconButton/IconButton';
+import playService from '../service/PlayService';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
 const styles = theme => ({
   root: {},
@@ -77,11 +80,11 @@ class TrackListTable extends React.Component {
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   handleNewPlaylistDialogClose = () => {
-    this.setState({ newPlaylistDialogOpen: false });
+    this.setState({newPlaylistDialogOpen: false});
   };
 
   handleSubmitNewPlaylist = () => {
-    this.setState({ newPlaylistDialogOpen: false });
+    this.setState({newPlaylistDialogOpen: false});
     const playlist = {
       title: this.state.newPlaylistTitle,
       shared: "shared",
@@ -95,11 +98,15 @@ class TrackListTable extends React.Component {
   };
 
   handlePlayAllClick = () => {
-    
+
   };
 
   handlePlaySelectedClick = () => {
 
+  };
+
+  playTrackClick = (e, track) => {
+    playService.playTrack(track);
   };
 
   handlePlaylistNameKeyUp = (e) => {
@@ -118,7 +125,9 @@ class TrackListTable extends React.Component {
       <div className={classes.root}>
         <EnhancedTableToolbar numSelected={selected.length}
                               toolbarDefaultText={tableTitle}
-                              onNewPlaylistClick={()=>{this.setState({newPlaylistDialogOpen: true})}}
+                              onNewPlaylistClick={() => {
+                                this.setState({newPlaylistDialogOpen: true})
+                              }}
                               onPlayAllClick={this.handlePlayAllClick}
                               onPlaySelectedClick={this.handlePlaySelectedClick}
         />
@@ -137,23 +146,25 @@ class TrackListTable extends React.Component {
                 return (
                   <TableRow
                     hover
-                    onClick={event => this.handleClick(event, track)}
                     role="checkbox"
                     aria-checked={isSelected}
                     tabIndex={-1}
                     key={`key-track-in-table-${idx}`}
                     selected={isSelected}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox checked={isSelected}/>
+                    <TableCell>
+                      <Checkbox checked={isSelected} onClick={event => this.handleClick(event, track)}/>
+                      <IconButton onClick={event => this.playTrackClick(event, track)}>
+                        <PlayArrowIcon/>
+                      </IconButton>
                     </TableCell>
-                    <TableCell component="th" scope="row" padding="none">
+                    <TableCell component="th" scope="row">
                       {track.title}
                     </TableCell>
-                    <TableCell padding="none">{track.artist}</TableCell>
-                    <TableCell padding="none">{track.duration}</TableCell>
-                    <TableCell padding="none">{track.quality}</TableCell>
-                    <TableCell padding="none">{track.download}</TableCell>
+                    <TableCell>{track.artist}</TableCell>
+                    <TableCell>{track.duration}</TableCell>
+                    <TableCell>{track.quality}</TableCell>
+                    <TableCell>{track.download}</TableCell>
                   </TableRow>
                 );
               })}
