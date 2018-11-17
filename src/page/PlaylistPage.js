@@ -51,7 +51,7 @@ class PlaylistPage extends React.Component {
       <div className={classes.root}>
         {playlists && playlists.length > 0 && (
           <div>
-            <Hidden implementation={'css'} smDown>
+            <Hidden implementation={'css'} only={['sm', 'xs']}>
               <GridList cellHeight={145} className={classes.gridList} cols={6}>
                 {playlists.map(playlist => (
                   <GridListTile key={`key-${playlist._id}`} cols={1}>
@@ -60,7 +60,7 @@ class PlaylistPage extends React.Component {
                 ))}
               </GridList>
             </Hidden>
-            <Hidden implementation={'css'} smUp>
+            <Hidden implementation={'css'} only={['lg','xl', 'md']}>
               <Paper>
                 <List >
                   {playlists.map(playlist => (

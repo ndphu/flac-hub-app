@@ -29,6 +29,10 @@ const styles = theme => ({
   content: {
     flex: '1 0 auto',
     padding: theme.spacing.unit,
+    margin: 6,
+    [theme.breakpoints.down('md')]: {
+      margin: 12,
+    }
   },
 
   controls: {
@@ -36,11 +40,9 @@ const styles = theme => ({
     textAlign: 'center',
     paddingLeft: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       alignItems: 'right',
       textAlign: 'right',
-      paddingLeft: 0,
-      paddingBottom: 0,
       marginTop: 12,
     }
   },
@@ -56,14 +58,14 @@ const styles = theme => ({
   playIcon: {
     height: 42,
     width: 42,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       margin: 0,
     },
     margin: theme.spacing.unit
   },
 
   skipIcon: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       height: 24,
       width: 24,
     }
@@ -79,7 +81,7 @@ const styles = theme => ({
 
   playButton: {
     margin: theme.spacing.unit,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       margin: 0
     }
   },
@@ -191,7 +193,7 @@ class PlayerComponent extends React.Component {
     const {isPlaying, seekerValue, duration, track, repeatMode, shuffle} = this.state;
     return (
       <div>
-        <Hidden smUp implementation={'css'}>
+        <Hidden only={['lg','xl', 'md']} implementation={'css'}>
           <GridList cols={2}>
             <GridListTile cols={1}>
               <div className={classes.details}>
@@ -234,7 +236,7 @@ class PlayerComponent extends React.Component {
           </GridList>
         </Hidden>
 
-        <Hidden smDown implementation={'css'}>
+        <Hidden only={['sm','xs']} implementation={'css'}>
           {track && <Slider
             classes={{container: classes.slider}}
             aria-labelledby="label"
@@ -251,10 +253,10 @@ class PlayerComponent extends React.Component {
               <GridListTile cols={1}>
                 <div className={classes.details}>
                   <div className={classes.content}>
-                    <Typography component="h6" variant="h5" noWrap>
+                    <Typography variant="title" noWrap color={'primary'}>
                       {track ? track.title : 'No Track To Play'}
                     </Typography>
-                    <Typography variant="subtitle2" color="textSecondary" noWrap>
+                    <Typography variant="subtitle1" color="textSecondary" noWrap>
                       {track ? track.artist : 'Please select a track to play'}
                     </Typography>
                   </div>

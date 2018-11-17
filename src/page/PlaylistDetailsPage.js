@@ -49,7 +49,7 @@ class PlaylistDetailsPage extends React.Component {
       <div className={classes.root}>
         {playlist && (
           <div>
-            <Hidden implementation={'css'} smDown>
+            <Hidden only={['sm', 'xs']} implementation={'css'}>
               <Card className={classes.card}>
                 <CardContent>
                   <Typography gutterBottom variant="headline">
@@ -60,7 +60,7 @@ class PlaylistDetailsPage extends React.Component {
                 <CardActions/>
               </Card>
             </Hidden>
-            <Hidden implementation={'css'} smUp>
+            <Hidden only={['lg', 'xl', 'md']} implementation={'css'}>
               <Paper>
                 <TrackList tracks={playlist.tracks} playlist={playlist}/>
               </Paper>
