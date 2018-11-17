@@ -6,17 +6,19 @@ import Card from '@material-ui/core/Card/Card';
 import CardContent from '@material-ui/core/CardContent/CardContent';
 import CardActions from '@material-ui/core/CardActions/CardActions';
 import Typography from '@material-ui/core/Typography/Typography';
+import Hidden from '@material-ui/core/Hidden/Hidden';
+import TrackList from '../component/TrackList';
+import Paper from '@material-ui/core/Paper/Paper';
 
 
 const styles = theme => ({
   root: {
-    display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
   },
 
-  card :{
+  card: {
     marginBottom: 2
   },
 });
@@ -45,16 +47,26 @@ class PlaylistDetailsPage extends React.Component {
     const {playlist} = this.state;
     return (
       <div className={classes.root}>
-        {playlist &&
-        <Card className={classes.card}>
-          <CardContent>
-            <Typography gutterBottom variant="headline" >
-              {playlist.title}
-            </Typography>
-            <TrackListTable playlist={playlist} tracks={playlist.tracks}/>
-          </CardContent>
-          <CardActions/>
-        </Card>
+        {playlist && (
+          <div>
+            <Hidden implementation={'css'} smDown>
+              <Card className={classes.card}>
+                <CardContent>
+                  <Typography gutterBottom variant="headline">
+                    {playlist.title}
+                  </Typography>
+                  <TrackListTable playlist={playlist} tracks={playlist.tracks}/>
+                </CardContent>
+                <CardActions/>
+              </Card>
+            </Hidden>
+            <Hidden implementation={'css'} smUp>
+              <Paper>
+                <TrackList tracks={playlist.tracks} playlist={playlist}/>
+              </Paper>
+            </Hidden>
+          </div>
+        )
         }
       </div>
     )

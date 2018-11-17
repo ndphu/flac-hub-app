@@ -15,7 +15,7 @@ const styles = {
     cursor: 'pointer',
   },
   pos: {
-    marginBottom: 12,
+    marginBottom: 4,
   },
 };
 

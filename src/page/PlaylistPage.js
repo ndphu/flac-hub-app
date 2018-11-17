@@ -5,11 +5,12 @@ import GridList from '@material-ui/core/GridList/GridList';
 import withStyles from '@material-ui/core/styles/withStyles';
 import GridListTile from '@material-ui/core/GridListTile/GridListTile';
 import navigationService from '../service/NavigationService';
-import ListSubheader from '@material-ui/core/ListSubheader/ListSubheader';
-import Card from '@material-ui/core/Card/Card';
-import CardContent from '@material-ui/core/CardContent/CardContent';
-import CardActions from '@material-ui/core/CardActions/CardActions';
-import Button from '@material-ui/core/Button/Button';
+import Hidden from '@material-ui/core/Hidden/Hidden';
+import List from '@material-ui/core/List/List';
+import ListItem from '@material-ui/core/ListItem/ListItem';
+import ListItemText from '@material-ui/core/ListItemText/ListItemText';
+import Paper from '@material-ui/core/Paper/Paper';
+import Divider from '@material-ui/core/Divider/Divider';
 
 
 const styles = theme => ({
@@ -49,13 +50,31 @@ class PlaylistPage extends React.Component {
     return (
       <div className={classes.root}>
         {playlists && playlists.length > 0 && (
-          <GridList cellHeight={145} className={classes.gridList} cols={6}>
-            {playlists.map(playlist => (
-              <GridListTile key={`key-${playlist._id}`} cols={1}>
-                <PlaylistCard playlist={playlist} onPlaylistCardClick={this.handlePlaylistCardClick}/>
-              </GridListTile>
-            ))}
-          </GridList>
+          <div>
+            <Hidden implementation={'css'} smDown>
+              <GridList cellHeight={145} className={classes.gridList} cols={6}>
+                {playlists.map(playlist => (
+                  <GridListTile key={`key-${playlist._id}`} cols={1}>
+                    <PlaylistCard playlist={playlist} onPlaylistCardClick={this.handlePlaylistCardClick}/>
+                  </GridListTile>
+                ))}
+              </GridList>
+            </Hidden>
+            <Hidden implementation={'css'} smUp>
+              <Paper>
+                <List >
+                  {playlists.map(playlist => (
+                    <ListItem key={`key-${playlist._id}`}
+                              button
+                              onClick={() => {this.handlePlaylistCardClick(playlist);}}
+                              divider>
+                      <ListItemText primary={playlist.title} secondary={`${playlist.tracks.length} tracks`}/>
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            </Hidden>
+          </div>
         )}
       </div>
     )

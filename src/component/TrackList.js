@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import TrackListItem from "./TrackListItem";
 import Button from '@material-ui/core/Button/Button';
 import AddIcon from '@material-ui/icons/Add';
+import playService from '../service/PlayService';
 
 const styles = theme => ({
   fab: {
@@ -21,9 +22,12 @@ class TrackList extends React.Component {
     this.setState({enableCheckable: !this.state.enableCheckable})
   };
 
-  handleTrackClick = (track) => {
-    console.log(track)
-
+  handleTrackClick = (track, i) => {
+    if (this.props.playlist) {
+      playService.playTrackInPlaylist(this.props.playlist, i)
+    } else {
+      playService.playTrack(track);
+    }
   };
 
   handleDownloadClick = (track) => {
@@ -44,7 +48,7 @@ class TrackList extends React.Component {
             <TrackListItem track={track}
                            checkable={enableCheckable}
                            key={`key-track-list-item-${i}`}
-                           onTrackClick={this.handleTrackClick}
+                           onTrackClick={() => {this.handleTrackClick(track, i);}}
                            onDownloadClick={this.handleDownloadClick}
             />)
           }

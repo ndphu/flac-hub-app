@@ -16,6 +16,7 @@ import DownloadIcon from '@material-ui/icons/CloudDownload';
 import ShuffleIcon from '@material-ui/icons/Shuffle';
 import RepeatOneIcon from '@material-ui/icons/RepeatOne';
 import RepeatIcon from '@material-ui/icons/Repeat';
+import Hidden from '@material-ui/core/Hidden/Hidden';
 
 const styles = theme => ({
   container: {
@@ -35,6 +36,13 @@ const styles = theme => ({
     textAlign: 'center',
     paddingLeft: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
+    [theme.breakpoints.down('sm')]: {
+      alignItems: 'right',
+      textAlign: 'right',
+      paddingLeft: 0,
+      paddingBottom: 0,
+      marginTop: 12,
+    }
   },
 
   additionalControls: {
@@ -48,16 +56,32 @@ const styles = theme => ({
   playIcon: {
     height: 42,
     width: 42,
+    [theme.breakpoints.down('sm')]: {
+      margin: 0,
+    },
     margin: theme.spacing.unit
   },
+
+  skipIcon: {
+    [theme.breakpoints.down('sm')]: {
+      height: 24,
+      width: 24,
+    }
+  },
+
   spacer: {
     flex: '1 1 100%',
   },
+
   slider: {
     paddingLeft: 4
   },
+
   playButton: {
     margin: theme.spacing.unit,
+    [theme.breakpoints.down('sm')]: {
+      margin: 0
+    }
   },
 });
 
@@ -167,26 +191,15 @@ class PlayerComponent extends React.Component {
     const {isPlaying, seekerValue, duration, track, repeatMode, shuffle} = this.state;
     return (
       <div>
-        {track && <Slider
-          classes={{container: classes.slider}}
-          aria-labelledby="label"
-          value={seekerValue}
-          min={0}
-          max={duration}
-          onChange={this.handleSeekerChange}
-          onDragEnd={this.handleSeekerDragEnd}
-          onDragStart={this.handleSeekerDragStart}
-        />
-        }
-        <div className={classes.container}>
-          <GridList cols={3}>
+        <Hidden smUp implementation={'css'}>
+          <GridList cols={2}>
             <GridListTile cols={1}>
               <div className={classes.details}>
                 <div className={classes.content}>
-                  <Typography component="h6" variant="h5" noWrap>
+                  <Typography variant="title" noWrap color={'primary'}>
                     {track ? track.title : 'No Track To Play'}
                   </Typography>
-                  <Typography variant="subtitle2" color="textSecondary" noWrap>
+                  <Typography variant="subtitle1" color="textSecondary" noWrap>
                     {track ? track.artist : 'Please select a track to play'}
                   </Typography>
                 </div>
@@ -207,8 +220,8 @@ class PlayerComponent extends React.Component {
                         onClick={this.onPlayClick}
                         disabled={!track}
                 >
-                  {!isPlaying && <PlayArrowIcon className={classes.playIcon}/>}
-                  {isPlaying && <PauseIcon className={classes.playIcon}/>}
+                  {!isPlaying && <PlayArrowIcon/>}
+                  {isPlaying && <PauseIcon/>}
                 </Button>
                 <IconButton aria-label="Next"
                             disabled={!track}
@@ -218,41 +231,98 @@ class PlayerComponent extends React.Component {
                 </IconButton>
               </div>
             </GridListTile>
-            <GridListTile cols={1}>
-              <div className={classes.additionalControls}>
-                {repeatMode === 'one' ?
-                  <IconButton aria-label="Repeat One"
-                              disabled={!track}
-                              color={'secondary'}
-                              onClick={this.handleToggleRepeat}
-                  >
-                    <RepeatOneIcon/>
-                  </IconButton> :
-                  <IconButton aria-label="Repeat All"
-                              disabled={!track}
-                              color={repeatMode === 'all' ? 'secondary' : 'default'}
-                              onClick={this.handleToggleRepeat}>
-                    <RepeatIcon/>
-                  </IconButton>
-                }
-                <IconButton aria-label="Shuffle"
-                            disabled={!track}
-                            onClick={this.handleToggleShuffle}
-                            color={shuffle ? 'secondary' : 'default'}>
-                  <ShuffleIcon/>
-                </IconButton>
-                <IconButton aria-label="Current Queue"
-                            disabled={!track}>
-                  <QueueMusicIcon/>
-                </IconButton>
-                <IconButton aria-label="Download"
-                            disabled={!track}>
-                  <DownloadIcon/>
-                </IconButton>
-              </div>
-            </GridListTile>
           </GridList>
-        </div>
+        </Hidden>
+
+        <Hidden smDown implementation={'css'}>
+          {track && <Slider
+            classes={{container: classes.slider}}
+            aria-labelledby="label"
+            value={seekerValue}
+            min={0}
+            max={duration}
+            onChange={this.handleSeekerChange}
+            onDragEnd={this.handleSeekerDragEnd}
+            onDragStart={this.handleSeekerDragStart}
+          />
+          }
+          <div className={classes.container}>
+            <GridList cols={3}>
+              <GridListTile cols={1}>
+                <div className={classes.details}>
+                  <div className={classes.content}>
+                    <Typography component="h6" variant="h5" noWrap>
+                      {track ? track.title : 'No Track To Play'}
+                    </Typography>
+                    <Typography variant="subtitle2" color="textSecondary" noWrap>
+                      {track ? track.artist : 'Please select a track to play'}
+                    </Typography>
+                  </div>
+                </div>
+              </GridListTile>
+              <GridListTile cols={1}>
+                <div className={classes.controls}>
+                  <IconButton aria-label="Previous"
+                              disabled={!track}
+                              onClick={this.handlePreviousClick}
+                  >
+                    <SkipPreviousIcon className={classes.skipIcon}/>
+                  </IconButton>
+                  <Button aria-label="Play/pause"
+                          variant={'fab'}
+                          color={'primary'}
+                          className={classes.playButton}
+                          onClick={this.onPlayClick}
+                          disabled={!track}
+                  >
+                    {!isPlaying && <PlayArrowIcon className={classes.playIcon}/>}
+                    {isPlaying && <PauseIcon className={classes.playIcon}/>}
+                  </Button>
+                  <IconButton aria-label="Next"
+                              disabled={!track}
+                              onClick={this.handleNextClick}
+                  >
+                    <SkipNextIcon className={classes.skipIcon}/>
+                  </IconButton>
+                </div>
+              </GridListTile>
+              <GridListTile cols={1}>
+                <div className={classes.additionalControls}>
+                  {repeatMode === 'one' ?
+                    <IconButton aria-label="Repeat One"
+                                disabled={!track}
+                                color={'secondary'}
+                                onClick={this.handleToggleRepeat}
+                    >
+                      <RepeatOneIcon/>
+                    </IconButton> :
+                    <IconButton aria-label="Repeat All"
+                                disabled={!track}
+                                color={repeatMode === 'all' ? 'secondary' : 'default'}
+                                onClick={this.handleToggleRepeat}>
+                      <RepeatIcon/>
+                    </IconButton>
+                  }
+                  <IconButton aria-label="Shuffle"
+                              disabled={!track}
+                              onClick={this.handleToggleShuffle}
+                              color={shuffle ? 'secondary' : 'default'}>
+                    <ShuffleIcon/>
+                  </IconButton>
+                  <IconButton aria-label="Current Queue"
+                              disabled={!track}>
+                    <QueueMusicIcon/>
+                  </IconButton>
+                  <IconButton aria-label="Download"
+                              disabled={!track}>
+                    <DownloadIcon/>
+                  </IconButton>
+                </div>
+              </GridListTile>
+            </GridList>
+          </div>
+        </Hidden>
+
         <audio autoPlay={false}
                ref={node => this.audioEl = node}
                onCanPlay={this.onCanPlay}
