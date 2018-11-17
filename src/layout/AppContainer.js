@@ -4,20 +4,21 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import {fade} from '@material-ui/core/styles/colorManipulator';
 import {withStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
-import Hidden from "@material-ui/core/Hidden/Hidden";
 import Drawer from "@material-ui/core/Drawer/Drawer";
 import navigatorService from '../service/NavigationService';
 import {replaceAll} from '../utils/StringUtils';
 import AppDrawer from './AppDrawer';
 import Paper from '@material-ui/core/Paper';
 import PlayerComponent from '../component/player/PlayerComponent';
+import classNames from 'classnames';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import InputBase from '@material-ui/core/InputBase/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
+import Divider from '@material-ui/core/Divider/Divider';
 
 const drawerWidth = 240;
 const playerSmallHeight = 86;
@@ -27,27 +28,26 @@ const styles = theme => ({
     display: 'flex',
   },
   appBar: {
-    marginLeft: drawerWidth,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
     zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+
   menuButton: {
-    marginRight: 20,
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
+    marginLeft: 12,
+    marginRight: 36,
   },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
+
   grow: {
     flexGrow: 1,
   },
@@ -56,7 +56,6 @@ const styles = theme => ({
     padding: theme.spacing.unit * 3,
     marginBottom: playerSmallHeight,
   },
-  toolbar: theme.mixins.toolbar,
   title: {
     display: 'none',
     [theme.breakpoints.up('sm')]: {
@@ -102,20 +101,8 @@ const styles = theme => ({
       width: 380,
     }
   },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
 
-  playerSmall : {
+  playerSmall: {
     position: 'fixed',
     height: playerSmallHeight,
     bottom: 0,
@@ -123,7 +110,45 @@ const styles = theme => ({
     right: 0,
     zIndex: theme.zIndex.drawer + 1,
     backgroundColor: theme.palette.common.white,
-  }
+  },
+
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+  },
+  drawerOpen: {
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerClose: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: theme.spacing.unit * 7 + 1,
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing.unit * 9 + 1,
+    },
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    }
+  },
+  toolbar: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+
+  hide: {
+    display: 'none',
+  },
 });
 
 class AppContainer extends React.Component {
@@ -131,6 +156,15 @@ class AppContainer extends React.Component {
     anchorEl: null,
     mobileMoreAnchorEl: null,
     mobileOpen: false,
+    open: false,
+  };
+
+  handleDrawerOpen = () => {
+    this.setState({open: true});
+  };
+
+  handleDrawerClose = () => {
+    this.setState({open: false});
   };
 
   handleDrawerToggle = () => {
@@ -162,17 +196,24 @@ class AppContainer extends React.Component {
     return (
       <div className={classes.root}>
         <CssBaseline/>
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar variant={"regular"}>
+        <AppBar
+          position="fixed"
+          className={classNames(classes.appBar, {
+            [classes.appBarShift]: this.state.open,
+          })}
+        >
+          <Toolbar disableGutters={!this.state.open}>
             <IconButton
               color="inherit"
               aria-label="Open drawer"
-              onClick={this.handleDrawerToggle}
-              className={classes.menuButton}
+              onClick={this.handleDrawerOpen}
+              className={classNames(classes.menuButton, {
+                [classes.hide]: this.state.open,
+              })}
             >
               <MenuIcon/>
             </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+            <Typography variant="h6" color="inherit" noWrap className={classes.title}>
               FLAC Hub
             </Typography>
             <div className={classes.search}>
@@ -188,48 +229,31 @@ class AppContainer extends React.Component {
                 onKeyUp={this.handleSearchKeyUp}
               />
             </div>
-            <div className={classes.grow}/>
-            <div className={classes.sectionDesktop}>
-              <IconButton
-                aria-haspopup="true"
-                onClick={this.handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle/>
-              </IconButton>
-            </div>
           </Toolbar>
         </AppBar>
-        <nav className={classes.drawer}>
-          {/* The implementation can be swap with js to avoid SEO duplication of links. */}
-          <Hidden smUp implementation="css">
-            <Drawer
-              container={this.props.container}
-              variant="temporary"
-              open={this.state.mobileOpen}
-              onClose={this.handleDrawerToggle}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
-              }}
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-          <Hidden xsDown implementation="css">
-            <Drawer
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              variant="permanent"
-              open
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-        </nav>
+        <Drawer
+          variant="permanent"
+          className={classNames(classes.drawer, {
+            [classes.drawerOpen]: this.state.open,
+            [classes.drawerClose]: !this.state.open,
+          })}
+          classes={{
+            paper: classNames({
+              [classes.drawerOpen]: this.state.open,
+              [classes.drawerClose]: !this.state.open,
+            }),
+          }}
+          open={this.state.open}
+          onClose={this.handleDrawerToggle}
+        >
+          <div className={classes.toolbar}>
+            <IconButton onClick={this.handleDrawerClose}>
+              {<ChevronLeftIcon/>}
+            </IconButton>
+          </div>
+          <Divider/>
+          {drawer}
+        </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar}/>
           {this.props.children}

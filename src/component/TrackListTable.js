@@ -105,8 +105,12 @@ class TrackListTable extends React.Component {
 
   };
 
-  playTrackClick = (e, track) => {
-    playService.playTrack(track);
+  playTrackClick = (e, track, index) => {
+    if (this.props.playlist) {
+      playService.playTrackInPlaylist(this.props.playlist, index);
+    } else {
+      playService.playTrack(track);
+    }
   };
 
   handlePlaylistNameKeyUp = (e) => {
@@ -154,7 +158,7 @@ class TrackListTable extends React.Component {
                   >
                     <TableCell>
                       <Checkbox checked={isSelected} onClick={event => this.handleClick(event, track)}/>
-                      <IconButton onClick={event => this.playTrackClick(event, track)}>
+                      <IconButton onClick={event => this.playTrackClick(event, track, idx)}>
                         <PlayArrowIcon/>
                       </IconButton>
                     </TableCell>

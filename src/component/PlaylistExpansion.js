@@ -9,6 +9,10 @@ import ListItem from "@material-ui/core/ListItem/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import LibraryMusic from '@material-ui/icons/LibraryMusic'
+import TrackListTable from './TrackListTable';
+import Typography from '@material-ui/core/Typography/Typography';
+import Hidden from '@material-ui/core/Hidden/Hidden';
+import TrackList from './TrackList';
 
 const styles = theme => ({
   nested: {
@@ -16,7 +20,13 @@ const styles = theme => ({
   },
   playlistList: {
     width: '100%'
-  }
+  },
+  table: {
+    minWidth: 1020,
+  },
+  tableWrapper: {
+    overflowX: 'auto',
+  },
 });
 
 class PlaylistExpansion extends React.Component {
@@ -27,25 +37,22 @@ class PlaylistExpansion extends React.Component {
     return (
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
-          <ListItem dense={true}>
-            <ListItemIcon>
-              <LibraryMusic/>
-            </ListItemIcon>
-            <ListItemText primary={playlist.title} secondary={`${playlist.tracks.length} Items`}/>
-          </ListItem>
+          <Typography variant="body1">
+            {playlist.title}
+          </Typography>
+
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <List disablePadding className={classes.playlistList}>
-            {playlist.tracks && playlist.tracks.map((track, i) => {
-              return (
-                <ListItem key={`key-track-in-playlist-${playlist._id}-${i}`}
-                          button
-                          className={classes.nested}>
-                  <ListItemText primary={track.title} secondary={track.artist}/>
-                </ListItem>
-              )
-            })}
-          </List>
+          <Hidden smUp implementation="css">
+            <TrackList tracks={playlist.tracks}/>
+          </Hidden>
+          <Hidden xsDown implementation="css">
+            <div>
+              <TrackListTable tracks={playlist.tracks}
+                              playlist={playlist}
+              />
+            </div>
+          </Hidden>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     );

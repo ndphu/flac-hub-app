@@ -1,41 +1,63 @@
 import React from 'react';
-
-import Playlist from "../component/Playlist"
-import api from '../api/Api';
 import playlistService from '../service/PlaylistService';
-import PlaylistExpansion from "./PlaylistExpansion";
-import Typography from '@material-ui/core/Typography/Typography';
+import PlaylistCard from '../component/playlist/PlaylistCard';
+import GridList from '@material-ui/core/GridList/GridList';
+import withStyles from '@material-ui/core/styles/withStyles';
+import GridListTile from '@material-ui/core/GridListTile/GridListTile';
+import navigationService from '../service/NavigationService';
+
+
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+  },
+});
 
 class PlaylistPage extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            playlists: []
-        }
-    };
+  state = {};
 
-    componentDidMount = () => {
-        this.loadPlaylist();
-    };
+  componentDidMount = () => {
+    this.loadPlaylist();
+  };
 
-    loadPlaylist = () => {
-        playlistService.getPlaylists().then((playlists) => {
-            this.setState({playlists: playlists})
-        })
-    };
+  componentWillReceiveProps = (nextProps) => {
+    const selectedId = nextProps.match.params.id;
+    console.log(nextProps);
+    this.setState({selectedId: selectedId})
+  };
 
-    render = () => {
-        return (
-            <div>
-                    {this.state.playlists && this.state.playlists.map((playlist, i) => {
-                        return (
-                            <PlaylistExpansion playlist={playlist}
-                                               key={`${playlist._id}`}>
-                            </PlaylistExpansion>)
-                    })}
-            </div>
-        )
-    }
+  loadPlaylist = () => {
+    playlistService.getPlaylists().then((playlists) => {
+      this.setState({playlists: playlists})
+    })
+  };
+
+  handlePlaylistCardClick = (playlist) => {
+    navigationService.goToPlaylist(playlist._id);
+  };
+
+  render = () => {
+    const {classes} = this.props;
+    const {playlists} = this.state;
+    return (
+      <div className={classes.root}>
+        <GridList cols={6} cellHeight={145} spacing={4}>
+          {playlists && playlists.map((playlist, i) => {
+            return (
+              <GridListTile key={`${playlist._id}`}>
+                <PlaylistCard playlist={playlist}
+                              onPlaylistCardClick={this.handlePlaylistCardClick}
+                />
+              </GridListTile>
+            )
+          })}
+        </GridList>
+      </div>
+    )
+  }
 }
 
-export default PlaylistPage;
+export default withStyles(styles)(PlaylistPage);
