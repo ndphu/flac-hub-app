@@ -5,19 +5,24 @@ import GridList from '@material-ui/core/GridList/GridList';
 import withStyles from '@material-ui/core/styles/withStyles';
 import GridListTile from '@material-ui/core/GridListTile/GridListTile';
 import navigationService from '../service/NavigationService';
+import ListSubheader from '@material-ui/core/ListSubheader/ListSubheader';
+import Card from '@material-ui/core/Card/Card';
+import CardContent from '@material-ui/core/CardContent/CardContent';
+import CardActions from '@material-ui/core/CardActions/CardActions';
+import Button from '@material-ui/core/Button/Button';
 
 
 const styles = theme => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
-  },
+  }
 });
 
 class PlaylistPage extends React.Component {
-  state = {};
+  state = {
+    playlists: []
+  };
 
   componentDidMount = () => {
     this.loadPlaylist();
@@ -25,7 +30,6 @@ class PlaylistPage extends React.Component {
 
   componentWillReceiveProps = (nextProps) => {
     const selectedId = nextProps.match.params.id;
-    console.log(nextProps);
     this.setState({selectedId: selectedId})
   };
 
@@ -44,17 +48,15 @@ class PlaylistPage extends React.Component {
     const {playlists} = this.state;
     return (
       <div className={classes.root}>
-        <GridList cols={6} cellHeight={145} spacing={4}>
-          {playlists && playlists.map((playlist, i) => {
-            return (
-              <GridListTile key={`${playlist._id}`}>
-                <PlaylistCard playlist={playlist}
-                              onPlaylistCardClick={this.handlePlaylistCardClick}
-                />
+        {playlists && playlists.length > 0 && (
+          <GridList cellHeight={145} className={classes.gridList} cols={6}>
+            {playlists.map(playlist => (
+              <GridListTile key={`key-${playlist._id}`} cols={1}>
+                <PlaylistCard playlist={playlist} onPlaylistCardClick={this.handlePlaylistCardClick}/>
               </GridListTile>
-            )
-          })}
-        </GridList>
+            ))}
+          </GridList>
+        )}
       </div>
     )
   }

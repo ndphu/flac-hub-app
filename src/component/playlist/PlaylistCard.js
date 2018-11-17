@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Card from '@material-ui/core/Card/Card';
 import CardContent from '@material-ui/core/CardContent/CardContent';
@@ -7,7 +6,6 @@ import Typography from '@material-ui/core/Typography/Typography';
 import CardActions from '@material-ui/core/CardActions/CardActions';
 import Button from '@material-ui/core/Button/Button';
 import playService from '../../service/PlayService';
-import CardMedia from '@material-ui/core/CardMedia/CardMedia';
 
 const styles = {
   card: {
@@ -30,7 +28,7 @@ class PlaylistCard extends React.Component {
           <Typography variant="title"
                       color="textSecondary"
                       className={classes.title}
-                      onClick={() => {onPlaylistCardClick && onPlaylistCardClick(playlist)}}
+                      onClick={() => {onPlaylistCardClick(playlist)}}
             >
             {playlist.title}
           </Typography>
