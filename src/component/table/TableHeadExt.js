@@ -14,19 +14,19 @@ const tableHeadStyle = theme => ({
 
 class TableHeadExt extends React.Component {
   render() {
-    const {onSelectAllClick, numSelected, rowCount, columns} = this.props;
+    const {onSelectAllClick, numSelected, rowCount, columns, editable} = this.props;
     const {classes} = this.props;
     return (
       <TableHead className={classes.headerRow}>
         <TableRow>
           <TableCell>
-            <Checkbox
+            {editable && <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected > 0 && numSelected === rowCount}
               onChange={onSelectAllClick}
-            />
+            />}
           </TableCell>
-          {columns.map((column,i) => {
+          {columns.map((column, i) => {
             return (
               <TableCell
                 key={column.id}

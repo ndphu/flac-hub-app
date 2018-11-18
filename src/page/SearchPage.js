@@ -132,7 +132,8 @@ class SearchPage extends React.Component {
               </Hidden>
               <Hidden xsDown implementation="css">
                 <TrackListTable tracks={tracks[searchType]}
-                                tableTitle={`Search result for ${this.state.query}`}/>
+                                tableTitle={`Search result for ${this.state.query}`}
+                                editable={true}/>
               </Hidden>
             </div>
             <div hidden={searchType !== 'artist'}>
@@ -141,7 +142,8 @@ class SearchPage extends React.Component {
               </Hidden>
               <Hidden xsDown implementation="css">
                 <TrackListTable tracks={tracks[searchType]}
-                                tableTitle={`Search result for ${this.state.query}`}/>
+                                tableTitle={`Search result for ${this.state.query}`}
+                                editable={true}/>
               </Hidden>
             </div>
           </div>

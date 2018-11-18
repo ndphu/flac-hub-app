@@ -45,7 +45,7 @@ class TrackListTable extends React.Component {
     selected: [],
     page: 0,
     newPlaylistDialogOpen: false,
-
+    editable: false,
   };
 
   handleSelectAllClick = event => {
@@ -123,7 +123,7 @@ class TrackListTable extends React.Component {
   };
 
   render = () => {
-    const {classes, tracks, tableTitle} = this.props;
+    const {classes, tracks, tableTitle, editable} = this.props;
     const {selected, newPlaylistTitle} = this.state;
     return (
       <div className={classes.root}>
@@ -138,6 +138,7 @@ class TrackListTable extends React.Component {
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
+              editable={editable}
               numSelected={selected.length}
               onSelectAllClick={this.handleSelectAllClick}
               rowCount={tracks.length}
@@ -157,7 +158,7 @@ class TrackListTable extends React.Component {
                     selected={isSelected}
                   >
                     <TableCell>
-                      <Checkbox checked={isSelected} onClick={event => this.handleClick(event, track)}/>
+                      {editable && <Checkbox checked={isSelected} onClick={event => this.handleClick(event, track)}/>}
                       <IconButton onClick={event => this.playTrackClick(event, track, idx)}>
                         <PlayArrowIcon/>
                       </IconButton>

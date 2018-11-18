@@ -17,10 +17,12 @@ import ShuffleIcon from '@material-ui/icons/Shuffle';
 import RepeatOneIcon from '@material-ui/icons/RepeatOne';
 import RepeatIcon from '@material-ui/icons/Repeat';
 import Hidden from '@material-ui/core/Hidden/Hidden';
+import MenuItem from '@material-ui/core/MenuItem/MenuItem';
+import Menu from '@material-ui/core/Menu/Menu';
+import Popover from '@material-ui/core/Popover/Popover';
 
 const styles = theme => ({
   container: {
-    padding: theme.spacing.unit,
   },
   details: {
     display: 'flex',
@@ -29,7 +31,6 @@ const styles = theme => ({
   content: {
     flex: '1 0 auto',
     padding: theme.spacing.unit,
-    margin: 6,
     [theme.breakpoints.down('md')]: {
       margin: 12,
     }
@@ -38,13 +39,13 @@ const styles = theme => ({
   controls: {
     alignItems: 'center',
     textAlign: 'center',
-    paddingLeft: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
     [theme.breakpoints.down('md')]: {
+      marginTop: 12,
+    },
+    [theme.breakpoints.down('sm')]: {
       alignItems: 'right',
       textAlign: 'right',
-      marginTop: 12,
-    }
+    },
   },
 
   additionalControls: {
@@ -61,7 +62,6 @@ const styles = theme => ({
     [theme.breakpoints.down('md')]: {
       margin: 0,
     },
-    margin: theme.spacing.unit
   },
 
   skipIcon: {
@@ -81,10 +81,10 @@ const styles = theme => ({
 
   playButton: {
     margin: theme.spacing.unit,
-    [theme.breakpoints.down('md')]: {
-      margin: 0
-    }
   },
+  controlButton: {
+    margin: theme.spacing.unit,
+  }
 });
 
 class PlayerComponent extends React.Component {
@@ -188,12 +188,26 @@ class PlayerComponent extends React.Component {
     this.audioEl.currentTime = this.state.seekerValue;
   };
 
+  handleDownloadClick = event => {
+    this.setState({anchorEl: event.currentTarget});
+  };
+
+  handleMenuClose = event => {
+    this.setState({
+      anchorEl: null,
+    });
+  };
+
+  handleDownloadItemClick = (source) => {
+    window.open(source.source,'_newtab');
+  };
+
   render = () => {
     const {classes, theme} = this.props;
-    const {isPlaying, seekerValue, duration, track, repeatMode, shuffle} = this.state;
+    const {isPlaying, seekerValue, duration, track, repeatMode, shuffle, anchorEl} = this.state;
     return (
       <div>
-        <Hidden only={['lg','xl', 'md']} implementation={'css'}>
+        <Hidden only={['lg', 'xl', 'md']} implementation={'css'}>
           <GridList cols={2}>
             <GridListTile cols={1}>
               <div className={classes.details}>
@@ -236,7 +250,7 @@ class PlayerComponent extends React.Component {
           </GridList>
         </Hidden>
 
-        <Hidden only={['sm','xs']} implementation={'css'}>
+        <Hidden only={['sm', 'xs']} implementation={'css'}>
           {track && <Slider
             classes={{container: classes.slider}}
             aria-labelledby="label"
@@ -264,9 +278,17 @@ class PlayerComponent extends React.Component {
               </GridListTile>
               <GridListTile cols={1}>
                 <div className={classes.controls}>
+                  <IconButton aria-label="Shuffle"
+                              disabled={!track}
+                              onClick={this.handleToggleShuffle}
+                              color={shuffle ? 'secondary' : 'default'}
+                              className={classes.controlButton}>
+                    <ShuffleIcon/>
+                  </IconButton>
                   <IconButton aria-label="Previous"
                               disabled={!track}
                               onClick={this.handlePreviousClick}
+                              className={classes.controlButton}
                   >
                     <SkipPreviousIcon className={classes.skipIcon}/>
                   </IconButton>
@@ -283,40 +305,42 @@ class PlayerComponent extends React.Component {
                   <IconButton aria-label="Next"
                               disabled={!track}
                               onClick={this.handleNextClick}
+                              className={classes.controlButton}
                   >
                     <SkipNextIcon className={classes.skipIcon}/>
                   </IconButton>
-                </div>
-              </GridListTile>
-              <GridListTile cols={1}>
-                <div className={classes.additionalControls}>
                   {repeatMode === 'one' ?
                     <IconButton aria-label="Repeat One"
                                 disabled={!track}
                                 color={'secondary'}
                                 onClick={this.handleToggleRepeat}
+                                className={classes.controlButton}
                     >
                       <RepeatOneIcon/>
                     </IconButton> :
                     <IconButton aria-label="Repeat All"
                                 disabled={!track}
                                 color={repeatMode === 'all' ? 'secondary' : 'default'}
-                                onClick={this.handleToggleRepeat}>
+                                onClick={this.handleToggleRepeat}
+                                className={classes.controlButton}
+                    >
                       <RepeatIcon/>
                     </IconButton>
                   }
-                  <IconButton aria-label="Shuffle"
-                              disabled={!track}
-                              onClick={this.handleToggleShuffle}
-                              color={shuffle ? 'secondary' : 'default'}>
-                    <ShuffleIcon/>
-                  </IconButton>
+                </div>
+              </GridListTile>
+              <GridListTile cols={1}>
+                <div className={classes.additionalControls}>
                   <IconButton aria-label="Current Queue"
                               disabled={!track}>
                     <QueueMusicIcon/>
                   </IconButton>
                   <IconButton aria-label="Download"
-                              disabled={!track}>
+                              disabled={!track}
+                              aria-owns={anchorEl ? 'download-menu' : undefined}
+                              aria-haspopup="true"
+                              onClick={this.handleDownloadClick}
+                  >
                     <DownloadIcon/>
                   </IconButton>
                 </div>
@@ -338,6 +362,24 @@ class PlayerComponent extends React.Component {
             type={'audio/mp3'}
           />}
         </audio>
+
+        <Menu
+          id='download-menu'
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.handleMenuClose}
+        >
+          {track && track.sources && track.sources.map((s, i) => {
+            return <MenuItem onClick={() => { this.handleDownloadItemClick(s); }}
+                             key={`key-track-download-item-${i}-${s.source}`}
+            >
+              {s.quality}
+            </MenuItem>
+          })}
+
+        </Menu>
+
+
       </div>
     );
   }
