@@ -20,6 +20,11 @@ import playlistService from '../service/PlaylistService';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import playService from '../service/PlayService';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import Typography from '@material-ui/core/Typography/Typography';
+import DownloadIcon from '@material-ui/icons/CloudDownload';
+import itemService from '../service/ItemService';
+import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
+import Select from '@material-ui/core/Select/Select';
 
 const styles = theme => ({
   root: {},
@@ -28,6 +33,17 @@ const styles = theme => ({
   },
   tableWrapper: {
     overflowX: 'auto',
+  },
+  titleCell: {
+    display: 'flex',
+    alignItems: 'center',
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    padding: 0
+  },
+  playButton: {
+    //padding: 16
+    marginRight: theme.spacing.unit,
   },
 });
 
@@ -46,7 +62,12 @@ class TrackListTable extends React.Component {
     page: 0,
     newPlaylistDialogOpen: false,
     editable: false,
+    loadingTracks: [],
   };
+
+  componentDidMount() {
+    this.setState({tracks: this.props.tracks});
+  }
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
@@ -105,6 +126,16 @@ class TrackListTable extends React.Component {
 
   };
 
+  handleDownloadTrack = (track, idx) => {
+    this.state.loadingTracks[track.link] = true;
+    this.setState({loadingTracks: this.state.loadingTracks})
+    itemService.getItemSources(track).then(sources => {
+      this.state.tracks[idx].sources = sources;
+      this.state.loadingTracks[track.link] = false;
+      this.setState({tracks: this.state.tracks, loadingTracks: this.state.loadingTracks});
+    })
+  };
+
   playTrackClick = (e, track, index) => {
     if (this.props.playlist) {
       playService.playTrackInPlaylist(this.props.playlist, index);
@@ -123,18 +154,18 @@ class TrackListTable extends React.Component {
   };
 
   render = () => {
-    const {classes, tracks, tableTitle, editable} = this.props;
-    const {selected, newPlaylistTitle} = this.state;
-    return (
+    const {classes, tableTitle, editable} = this.props;
+    const {selected, newPlaylistTitle, loadingTracks, tracks} = this.state;
+    return tracks ? (
       <div className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length}
-                              toolbarDefaultText={tableTitle}
-                              onNewPlaylistClick={() => {
-                                this.setState({newPlaylistDialogOpen: true})
-                              }}
-                              onPlayAllClick={this.handlePlayAllClick}
-                              onPlaySelectedClick={this.handlePlaySelectedClick}
-        />
+        {editable && <EnhancedTableToolbar numSelected={selected.length}
+                                           toolbarDefaultText={tableTitle}
+                                           onNewPlaylistClick={() => {
+                                             this.setState({newPlaylistDialogOpen: true})
+                                           }}
+                                           onPlayAllClick={this.handlePlayAllClick}
+                                           onPlaySelectedClick={this.handlePlaySelectedClick}
+        />}
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -157,19 +188,64 @@ class TrackListTable extends React.Component {
                     key={`key-track-in-table-${idx}`}
                     selected={isSelected}
                   >
+                    {editable &&
                     <TableCell>
-                      {editable && <Checkbox checked={isSelected} onClick={event => this.handleClick(event, track)}/>}
-                      <IconButton onClick={event => this.playTrackClick(event, track, idx)}>
-                        <PlayArrowIcon/>
-                      </IconButton>
+                      <Checkbox checked={isSelected} onClick={event => this.handleClick(event, track)}/>
                     </TableCell>
-                    <TableCell component="th" scope="row">
-                      {track.title}
+                    }
+                    <TableCell scope="row">
+                      <div className={classes.titleCell}>
+                        <IconButton onClick={event => this.playTrackClick(event, track, idx)}
+                                    className={classes.playButton}>
+                          <PlayArrowIcon/>
+                        </IconButton>
+                        <Typography>
+                          {track.title}
+                        </Typography>
+                      </div>
                     </TableCell>
-                    <TableCell>{track.artist}</TableCell>
-                    <TableCell>{track.duration}</TableCell>
-                    <TableCell>{track.quality}</TableCell>
-                    <TableCell>{track.download}</TableCell>
+                    <TableCell>
+                      <Typography>
+                        {track.artist}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>
+                        {track.duration}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>
+                        {track.quality}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      {(track.sources && track.sources.length) ? (
+                        <Select
+                          native
+                          onChange={(e) => {e.target.value && window.open(e.target.value, '_newtab');}}
+                        >
+                          <option/>
+                          {track.sources.map((s, sidx) => {
+                            return <option value={s.source}
+                                           key={`source-download-${sidx}`}>{s.quality}</option>
+                          })}
+                        </Select>
+                      ) : (
+                        <div>
+                          {!loadingTracks[track.link] ?
+                            (
+                              <IconButton onClick={() => {
+                                this.handleDownloadTrack(track, idx)
+                              }}>
+                                <DownloadIcon/>
+                              </IconButton>
+                            ) : (
+                              <CircularProgress className={classes.progress}/>
+                            )
+                          }
+                        </div>)}
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -205,12 +281,12 @@ class TrackListTable extends React.Component {
           </Dialog>
         </div>
       </div>
+    ) : (
+      <div></div>
     );
   }
 }
 
-TrackListTable.propTypes = {
-  tableTitle: PropTypes.string.isRequired,
-};
+TrackListTable.propTypes = {};
 
 export default withStyles(styles)(TrackListTable);

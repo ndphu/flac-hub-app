@@ -10,7 +10,7 @@ import List from '@material-ui/core/List/List';
 import ListItem from '@material-ui/core/ListItem/ListItem';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import Paper from '@material-ui/core/Paper/Paper';
-import Divider from '@material-ui/core/Divider/Divider';
+import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
 
 
 const styles = theme => ({
@@ -35,8 +35,9 @@ class PlaylistPage extends React.Component {
   };
 
   loadPlaylist = () => {
+    this.setState({loading: true});
     playlistService.getPlaylists().then((playlists) => {
-      this.setState({playlists: playlists})
+      this.setState({playlists: playlists, loading: false})
     })
   };
 
@@ -46,13 +47,14 @@ class PlaylistPage extends React.Component {
 
   render = () => {
     const {classes} = this.props;
-    const {playlists} = this.state;
+    const {playlists, loading} = this.state;
     return (
       <div className={classes.root}>
+        {loading && <LinearProgress/>}
         {playlists && playlists.length > 0 && (
           <div>
             <Hidden implementation={'css'} only={['sm', 'xs']}>
-              <GridList cellHeight={145} className={classes.gridList} cols={6}>
+              <GridList cellHeight={136} className={classes.gridList} cols={5}>
                 {playlists.map(playlist => (
                   <GridListTile key={`key-${playlist._id}`} cols={1}>
                     <PlaylistCard playlist={playlist} onPlaylistCardClick={this.handlePlaylistCardClick}/>

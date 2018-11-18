@@ -19,11 +19,9 @@ import RepeatIcon from '@material-ui/icons/Repeat';
 import Hidden from '@material-ui/core/Hidden/Hidden';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import Menu from '@material-ui/core/Menu/Menu';
-import Popover from '@material-ui/core/Popover/Popover';
 
 const styles = theme => ({
-  container: {
-  },
+  container: {},
   details: {
     display: 'flex',
     flexDirection: 'column',
@@ -31,14 +29,13 @@ const styles = theme => ({
   content: {
     flex: '1 0 auto',
     padding: theme.spacing.unit,
-    [theme.breakpoints.down('md')]: {
-      margin: 12,
-    }
+    margin: theme.spacing.unit,
   },
 
   controls: {
     alignItems: 'center',
     textAlign: 'center',
+    marginTop: 10,
     [theme.breakpoints.down('md')]: {
       marginTop: 12,
     },
@@ -49,7 +46,7 @@ const styles = theme => ({
   },
 
   additionalControls: {
-    marginTop: 12,
+    marginTop: 14,
     alignItems: 'right',
     textAlign: 'right',
     paddingLeft: theme.spacing.unit,
@@ -57,22 +54,13 @@ const styles = theme => ({
   },
 
   playIcon: {
-    height: 42,
-    width: 42,
-    [theme.breakpoints.down('md')]: {
-      margin: 0,
-    },
+    height: 38,
+    width: 38,
   },
 
-  skipIcon: {
-    [theme.breakpoints.down('md')]: {
-      height: 24,
-      width: 24,
-    }
-  },
-
-  spacer: {
-    flex: '1 1 100%',
+  controlIcon: {
+    height: 24,
+    width: 24,
   },
 
   slider: {
@@ -80,10 +68,11 @@ const styles = theme => ({
   },
 
   playButton: {
-    margin: theme.spacing.unit,
+    margin: 4,
   },
+
   controlButton: {
-    margin: theme.spacing.unit,
+    margin: 4
   }
 });
 
@@ -199,7 +188,7 @@ class PlayerComponent extends React.Component {
   };
 
   handleDownloadItemClick = (source) => {
-    window.open(source.source,'_newtab');
+    window.open(source.source, '_newtab');
   };
 
   render = () => {
@@ -227,7 +216,7 @@ class PlayerComponent extends React.Component {
                             disabled={!track}
                             onClick={this.handlePreviousClick}
                 >
-                  <SkipPreviousIcon className={classes.skipIcon}/>
+                  <SkipPreviousIcon className={classes.controlIcon}/>
                 </IconButton>
                 <Button aria-label="Play/pause"
                         variant={'fab'}
@@ -236,14 +225,14 @@ class PlayerComponent extends React.Component {
                         onClick={this.onPlayClick}
                         disabled={!track}
                 >
-                  {!isPlaying && <PlayArrowIcon/>}
-                  {isPlaying && <PauseIcon/>}
+                  {!isPlaying && <PlayArrowIcon className={classes.playIcon}/>}
+                  {isPlaying && <PauseIcon className={classes.playIcon}/>}
                 </Button>
                 <IconButton aria-label="Next"
                             disabled={!track}
                             onClick={this.handleNextClick}
                 >
-                  <SkipNextIcon className={classes.skipIcon}/>
+                  <SkipNextIcon className={classes.controlIcon}/>
                 </IconButton>
               </div>
             </GridListTile>
@@ -283,14 +272,14 @@ class PlayerComponent extends React.Component {
                               onClick={this.handleToggleShuffle}
                               color={shuffle ? 'secondary' : 'default'}
                               className={classes.controlButton}>
-                    <ShuffleIcon/>
+                    <ShuffleIcon className={classes.controlIcon}/>
                   </IconButton>
                   <IconButton aria-label="Previous"
                               disabled={!track}
                               onClick={this.handlePreviousClick}
                               className={classes.controlButton}
                   >
-                    <SkipPreviousIcon className={classes.skipIcon}/>
+                    <SkipPreviousIcon className={classes.controlIcon}/>
                   </IconButton>
                   <Button aria-label="Play/pause"
                           variant={'fab'}
@@ -307,7 +296,7 @@ class PlayerComponent extends React.Component {
                               onClick={this.handleNextClick}
                               className={classes.controlButton}
                   >
-                    <SkipNextIcon className={classes.skipIcon}/>
+                    <SkipNextIcon className={classes.controlIcon}/>
                   </IconButton>
                   {repeatMode === 'one' ?
                     <IconButton aria-label="Repeat One"
@@ -316,7 +305,7 @@ class PlayerComponent extends React.Component {
                                 onClick={this.handleToggleRepeat}
                                 className={classes.controlButton}
                     >
-                      <RepeatOneIcon/>
+                      <RepeatOneIcon lassName={classes.controlIcon}/>
                     </IconButton> :
                     <IconButton aria-label="Repeat All"
                                 disabled={!track}
@@ -324,7 +313,7 @@ class PlayerComponent extends React.Component {
                                 onClick={this.handleToggleRepeat}
                                 className={classes.controlButton}
                     >
-                      <RepeatIcon/>
+                      <RepeatIcon className={classes.controlIcon}/>
                     </IconButton>
                   }
                 </div>
@@ -332,16 +321,18 @@ class PlayerComponent extends React.Component {
               <GridListTile cols={1}>
                 <div className={classes.additionalControls}>
                   <IconButton aria-label="Current Queue"
-                              disabled={!track}>
-                    <QueueMusicIcon/>
+                              disabled={!track}
+                              className={classes.controlButton}>
+                    <QueueMusicIcon className={classes.controlIcon}/>
                   </IconButton>
                   <IconButton aria-label="Download"
                               disabled={!track}
                               aria-owns={anchorEl ? 'download-menu' : undefined}
                               aria-haspopup="true"
                               onClick={this.handleDownloadClick}
+                              className={classes.controlButton}
                   >
-                    <DownloadIcon/>
+                    <DownloadIcon className={classes.controlIcon}/>
                   </IconButton>
                 </div>
               </GridListTile>
@@ -358,7 +349,7 @@ class PlayerComponent extends React.Component {
                onEnded={this.onEnded}
         >
           {track && <source
-            src={track.sources[0].source}
+            src={playService.getSource(track)}
             type={'audio/mp3'}
           />}
         </audio>
@@ -370,7 +361,9 @@ class PlayerComponent extends React.Component {
           onClose={this.handleMenuClose}
         >
           {track && track.sources && track.sources.map((s, i) => {
-            return <MenuItem onClick={() => { this.handleDownloadItemClick(s); }}
+            return <MenuItem onClick={() => {
+              this.handleDownloadItemClick(s);
+            }}
                              key={`key-track-download-item-${i}-${s.source}`}
             >
               {s.quality}

@@ -8,22 +8,31 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/L
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import DownloadIcon from '@material-ui/icons/CloudDownload';
 import MusicNodeIcon from '@material-ui/icons/MusicNote';
+import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
 
 const styles = theme => {
 };
 
 class TrackListItem extends React.Component {
   render = () => {
-    const {track, checkable, onDownloadClick, onTrackClick} = this.props;
+    const {track, checkable, onDownloadClick, onTrackClick, classes} = this.props;
 
     return (
       <ListItem button onClick={() => {onTrackClick(track)}} divider>
         <ListItemText primary={track.title} secondary={track.artist}/>
         <ListItemSecondaryAction>
           {!checkable &&
-          <IconButton onClick={() => {onDownloadClick(track)}}>
-            <DownloadIcon />
-          </IconButton>
+          <div>
+            {track.loading ? (
+              <CircularProgress className={classes.progress}/>
+            ) : (
+              <IconButton onClick={() => {
+                onDownloadClick(track)
+              }}>
+                <DownloadIcon/>
+              </IconButton>
+            )}
+          </div>
           }
           {checkable &&
           <Checkbox

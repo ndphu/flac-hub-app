@@ -27,6 +27,10 @@ class NavigationService {
       this.history.push(`/playlist`)
     }
   }
+
+  goToSettingsPage = () => {
+    this.history.push(`/settings`)
+  }
 }
 
 const navigationService = new NavigationService();

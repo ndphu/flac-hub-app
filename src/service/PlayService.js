@@ -13,7 +13,7 @@ class PlayService {
   unsavedPlaylist = {
     tracks: []
   };
-  loopMode = 'loopOne';
+  loopMode = 'all';
 
   setPlayer = (player) => {
     this.player = player;
@@ -95,6 +95,17 @@ class PlayService {
 
   isShuffleEnabled = () => {
     return this.shuffle;
+  };
+
+  getSource = (track) => {
+    if (this.isHQPlayback())  {
+      return track.sources.filter(s => s.source.endsWith('mp3')).pop().source;
+    }
+    return track.sources[0].source;
+  };
+
+  isHQPlayback = () => {
+    return true;
   };
 }
 

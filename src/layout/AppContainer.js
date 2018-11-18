@@ -260,7 +260,7 @@ class AppContainer extends React.Component {
         </main>
         <Paper className={classes.playerSmall}
                elevation={12}
-               square={false}>
+               square>
           <PlayerComponent/>
         </Paper>
       </div>

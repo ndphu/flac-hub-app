@@ -133,7 +133,6 @@ class TableToolbarExt extends React.Component {
 TableToolbarExt.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired,
-    toolbarDefaultText: PropTypes.string.isRequired,
 };
 
 

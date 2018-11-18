@@ -9,6 +9,9 @@ import withStyles from '@material-ui/core/styles/withStyles';
 const tableHeadStyle = theme => ({
   headerRow: {
     //backgroundColor: lighten(theme.palette.primary.light, 0.90)
+  },
+  titleHeader: {
+    marginLeft: 42,
   }
 });
 
@@ -19,19 +22,22 @@ class TableHeadExt extends React.Component {
     return (
       <TableHead className={classes.headerRow}>
         <TableRow>
+          {editable &&
           <TableCell>
-            {editable && <Checkbox
+            <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected > 0 && numSelected === rowCount}
               onChange={onSelectAllClick}
-            />}
+            />
           </TableCell>
+          }
           {columns.map((column, i) => {
             return (
               <TableCell
                 key={column.id}
               >
-                {column.label}
+                <span style={{marginLeft: i === 0 ? 56 : 0}}>{column.label}</span>
+
               </TableCell>
             );
           }, this)}

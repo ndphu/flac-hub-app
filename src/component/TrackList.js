@@ -3,9 +3,12 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import List from "@material-ui/core/List/List";
 import PropTypes from "prop-types";
 import TrackListItem from "./TrackListItem";
-import Button from '@material-ui/core/Button/Button';
-import AddIcon from '@material-ui/icons/Add';
 import playService from '../service/PlayService';
+import itemService from '../service/ItemService';
+import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle';
+import Dialog from '@material-ui/core/Dialog/Dialog';
+import ListItem from '@material-ui/core/ListItem/ListItem';
+import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 
 const styles = theme => ({
   fab: {
@@ -16,7 +19,7 @@ const styles = theme => ({
 });
 
 class TrackList extends React.Component {
-  state = {enableCheckable: false};
+  state = {enableCheckable: false, openDialog: false};
 
   switchCheckable = () => {
     this.setState({enableCheckable: !this.state.enableCheckable})
@@ -31,7 +34,22 @@ class TrackList extends React.Component {
   };
 
   handleDownloadClick = (track) => {
-    console.log(track)
+    track.loading = true;
+    itemService.getItemSources(track).then(sources => {
+      track.loading = false;
+      this.setState({sources: sources, openDialog: true})
+    })
+
+  };
+
+  handleDownloadSource = (source) => {
+    this.setState({openDialog: false}, function () {
+      window.open(source.source, '_newtab');
+    });
+  };
+
+  handleDialogClose = () => {
+    this.setState({openDialog: false});
   };
 
   handleAddClick = () => {
@@ -40,7 +58,7 @@ class TrackList extends React.Component {
 
   render = () => {
     const {tracks, classes} = this.props;
-    const {enableCheckable} = this.state;
+    const {enableCheckable, sources, openDialog} = this.state;
     return (
       <div>
         <List>
@@ -53,12 +71,22 @@ class TrackList extends React.Component {
             />)
           }
         </List>
-        {!enableCheckable &&
-        <Button variant="fab" className={classes.fab} color={'primary'}
-                onClick={this.handleAddClick}>
-          <AddIcon/>
-        </Button>}
-
+        <Dialog aria-labelledby="download-dialog-title"
+                open={openDialog}
+                onClose={this.handleDialogClose}
+                fullWidth
+        >
+          <DialogTitle id="download-dialog-title">Select Quality</DialogTitle>
+          <div>
+            <List>
+              {sources && sources.map(source => (
+                <ListItem button onClick={()=>{this.handleDownloadSource(source);}} key={source.source}>
+                  <ListItemText primary={source.quality} />
+                </ListItem>
+              ))}
+            </List>
+          </div>
+        </Dialog>
       </div>
     )
   }

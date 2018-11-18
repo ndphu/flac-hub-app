@@ -26,8 +26,9 @@ class PlaylistCard extends React.Component {
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="title"
-                      color="textSecondary"
+                      color="primary"
                       className={classes.title}
+                      noWrap
                       onClick={() => {onPlaylistCardClick(playlist)}}
             >
             {playlist.title}

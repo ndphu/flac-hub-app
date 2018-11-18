@@ -5,7 +5,7 @@ import navigationService from './service/NavigationService';
 
 const staticNav = [
   {text: 'Playlist', icon: <LibraryMusicIcon/>, onClick: () => {navigationService.goToPlaylist()}},
-  {text: 'Settings', icon: <SettingsIcon/>, onClick: () => {navigationService.goToArtistSearch()}},
+  {text: 'Settings', icon: <SettingsIcon/>, onClick: () => {navigationService.goToSettingsPage()}},
 ];
 
 export default staticNav;

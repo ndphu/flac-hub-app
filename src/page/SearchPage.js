@@ -1,7 +1,5 @@
 import React from 'react';
 import searchService from '../service/SearchService';
-import loader from '../component/Loader';
-import itemService from '../service/ItemService';
 import Hidden from '@material-ui/core/Hidden/Hidden';
 import TrackList from '../component/TrackList';
 import TrackListTable from '../component/TrackListTable';
@@ -11,6 +9,7 @@ import Tabs from '@material-ui/core/Tabs/Tabs';
 import Tab from '@material-ui/core/Tab/Tab';
 import Paper from '@material-ui/core/Paper/Paper';
 import Divider from '@material-ui/core/Divider/Divider';
+import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
 
 
 const styles = theme => ({
@@ -58,11 +57,9 @@ class SearchPage extends React.Component {
   };
 
   search = (query, page, searchType) => {
-    console.log("search", query, page, searchType);
     if (!searchType) {
       return;
     }
-    loader.show();
     if (this.state.query && this.state.query !== query) {
       // clear current search result
       this.setState({
@@ -70,6 +67,7 @@ class SearchPage extends React.Component {
         initialized: {},
       });
     }
+    this.setState({loading: true});
     searchFunctions[searchType](query, page).then((result) => {
       if (this.state.tracks[searchType]) {
         this.state.tracks[searchType] = this.state.tracks[searchType].concat(result);
@@ -83,18 +81,9 @@ class SearchPage extends React.Component {
         tracks: this.state.tracks,
         page: this.state.page,
         hasMore: result.length >= 25,
+        loading: false,
       });
-      loader.hide();
     })
-  };
-
-  handleItemClick = (item) => {
-    loader.show();
-    itemService.getItemSources(item).then(sources => {
-      item.sources = sources;
-      this.setState({});
-      loader.hide()
-    });
   };
 
   handleTabChange = (event, idx) => {
@@ -107,11 +96,12 @@ class SearchPage extends React.Component {
 
 
   render = () => {
-    const {tracks, hasMore, searchType, idx} = this.state;
+    const {tracks, hasMore, searchType, idx, loading} = this.state;
     const {classes} = this.props;
     return (
       <div>
         <Paper className={classes.root}>
+          {loading && <LinearProgress/>}
           <Tabs
             value={idx}
             onChange={this.handleTabChange}
