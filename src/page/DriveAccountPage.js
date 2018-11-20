@@ -7,58 +7,69 @@ import accountService from "../service/AccountService";
 import Button from "@material-ui/core/Button/Button";
 import Divider from "@material-ui/core/Divider/Divider";
 import CreateAccountDialog from "../component/account/CreateAccountDialog";
+import navigationService from '../service/NavigationService';
 
 
 const styles = theme => ({
-    root: {
-        ...theme.mixins.gutters(),
-        paddingTop: theme.spacing.unit * 2,
-        paddingBottom: theme.spacing.unit * 2,
-    },
-    divider: {
-        ...theme.mixins.gutters(),
-        marginTop: 8,
-        marginBottom: 8,
-    }
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  },
+  divider: {
+    ...theme.mixins.gutters(),
+    marginTop: 8,
+    marginBottom: 8,
+  }
 });
 
 
 class DriveAccountPage extends React.Component {
-    state = {
-        accounts: [],
-        openCreateAccountDialog: false,
-    };
+  state = {
+    accounts: [],
+    openCreateAccountDialog: false,
+  };
 
-    componentDidMount = () => {
-        accountService.getDriveAccounts().then(accounts => this.setState(accounts))
-    };
+  componentDidMount = () => {
+    accountService.getDriveAccounts().then(accounts => this.setState({accounts}))
+  };
 
-    handleCreateAccountDialogClose = () => {
-        this.setState({openCreateAccountDialog: false})
-    };
+  handleCreateAccountDialogClose = () => {
+    this.setState({openCreateAccountDialog: false})
+    accountService.getDriveAccounts().then(accounts => this.setState({accounts}))
+  };
 
-    render = () => {
-        const {classes} = this.props;
-        const {accounts, openCreateAccountDialog} = this.state;
+  handleRowClick = (account) => {
+    navigationService.goToAccount(account._id)
+  };
 
-        return (
-            <Paper className={classes.root} elevation={1} square={true}>
-                <Typography variant="h5" component="h3" color={"primary"}>
-                    Storage Account
-                </Typography>
-                {accounts && accounts.length > 0 && <AccountTable accounts={accounts}/>}
-                <Divider className={classes.divider}/>
-                <Button variant={"contained"}
-                        color={"primary"}
-                        onClick={()=>{this.setState({openCreateAccountDialog: true})}}>
-                    Add
-                </Button>
-                <CreateAccountDialog open={openCreateAccountDialog}
-                                     handleClose={this.handleCreateAccountDialogClose}
-                />
-            </Paper>
-        )
-    }
+  render = () => {
+    const {classes} = this.props;
+    const {accounts, openCreateAccountDialog} = this.state;
+
+    return (
+      <Paper className={classes.root} elevation={1} square={true}>
+        <Typography variant="h5" component="h3" color={"primary"}>
+          Storage Account
+        </Typography>
+        {accounts && accounts.length > 0 &&
+        <AccountTable accounts={accounts} onRowClick={this.handleRowClick}/>
+        }
+        <div className={classes.divider}/>
+        <Button variant={"contained"}
+                color={"primary"}
+                onClick={() => {
+                  this.setState({openCreateAccountDialog: true})
+                }}>
+          Add
+        </Button>
+        {openCreateAccountDialog &&
+        <CreateAccountDialog open={openCreateAccountDialog}
+                             handleClose={this.handleCreateAccountDialogClose}
+        />}
+      </Paper>
+    )
+  }
 }
 
 export default withStyles(styles)(DriveAccountPage)

@@ -30,6 +30,14 @@ class NavigationService {
 
   goToSettingsPage = () => {
     this.history.push(`/settings`)
+  };
+
+  goToAccount = (id) => {
+    this.history.push(`/manage/driveAccount/${id}`)
+  };
+
+  goToManageDriveAccount() {
+    this.history.push(`/manage/driveAccount`)
   }
 }
 

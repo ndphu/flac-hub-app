@@ -71,6 +71,10 @@ class Api {
     window.location.href = config.unauthorizedPath;
   }
 
+  fetchBlob = (url) => {
+    return fetch(url).then(resp => resp.blob())
+  }
+
 }
 
 const api = new Api();
