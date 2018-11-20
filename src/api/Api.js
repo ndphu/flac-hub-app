@@ -51,12 +51,12 @@ class Api {
     });
   }
 
-  post = (path, body) => {
+  post = (path, body, raw) => {
     const input = config.baseUrl + path;
     return fetch(input, {
       method: 'POST',
       headers: this.buildHeaders(),
-      body: JSON.stringify(body)
+      body: raw ? body : JSON.stringify(body),
     }).then(resp => {
       if (resp.status === 401) {
         window.location.href = config.unauthorizedPath;

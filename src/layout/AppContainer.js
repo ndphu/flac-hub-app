@@ -12,7 +12,7 @@ import Drawer from "@material-ui/core/Drawer/Drawer";
 import navigatorService from '../service/NavigationService';
 import {replaceAll} from '../utils/StringUtils';
 import AppDrawer from './AppDrawer';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@material-ui/core/Paper/Paper';
 import PlayerComponent from '../component/player/PlayerComponent';
 import classNames from 'classnames';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
