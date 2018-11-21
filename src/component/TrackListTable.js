@@ -185,7 +185,7 @@ class TrackListTable extends React.Component {
                     role="checkbox"
                     aria-checked={isSelected}
                     tabIndex={-1}
-                    key={`key-track-in-table-${idx}`}
+                    key={`key-track-in-table-${track._id}`}
                     selected={isSelected}
                   >
                     {editable &&
@@ -282,7 +282,7 @@ class TrackListTable extends React.Component {
         </div>
       </div>
     ) : (
-      <div></div>
+      <div/>
     );
   }
 }

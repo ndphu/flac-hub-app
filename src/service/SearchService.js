@@ -5,8 +5,12 @@ class SearchService {
     return api.get(`/search/q/${btoa(unescape(encodeURIComponent(query)))}?page=${page}`)
   };
   
-  searchByArtist = (query, page) => {
-    return api.get(`/search/byArtist/${btoa(unescape(encodeURIComponent(query)))}/tracks?page=${page}`)
+  searchByArtist = (query, page, size) => {
+    if (!size) {
+      size = 25
+    }
+    //return api.get(`/search/byArtist/${btoa(unescape(encodeURIComponent(query)))}/tracks?page=${page}`)
+      return api.get(`/search/q/${btoa(unescape(encodeURIComponent(query)))}/artist/tracks?page=${page}&size=${size}`)
   };
 
   searchByAlbum = (query, page) => {
