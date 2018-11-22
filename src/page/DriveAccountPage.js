@@ -53,7 +53,9 @@ class DriveAccountPage extends React.Component {
           Storage Account
         </Typography>
         {accounts && accounts.length > 0 &&
-        <AccountTable accounts={accounts} onRowClick={this.handleRowClick}/>
+        <AccountTable accounts={accounts}
+                      onRowClick={this.handleRowClick}
+        />
         }
         <div className={classes.divider}/>
         <Button variant={"contained"}

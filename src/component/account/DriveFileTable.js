@@ -1,22 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import TableHead from '@material-ui/core/TableHead/TableHead';
 import TableRow from '@material-ui/core/TableRow/TableRow';
 import TableCell from '@material-ui/core/TableCell/TableCell';
 import TableBody from '@material-ui/core/TableBody/TableBody';
 import Table from '@material-ui/core/Table/Table';
+import DownloadIcon from '@material-ui/icons/CloudDownload';
+import IconButton from '@material-ui/core/IconButton/IconButton';
 
 const styles = theme => ({
   tableRow: {
-    cursor: 'pointer',
   }
 });
 
 class DriveFileTable extends React.Component {
 
   render = () => {
-    const {classes, files, onRowClick} = this.props;
+    const {classes, files, onRowClick, onDownloadClick} = this.props;
 
     return (
       <Table className={classes.table}>
@@ -25,6 +25,7 @@ class DriveFileTable extends React.Component {
             <TableCell>Name</TableCell>
             <TableCell>Key</TableCell>
             <TableCell>Size</TableCell>
+            <TableCell>Download</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -42,6 +43,13 @@ class DriveFileTable extends React.Component {
                 </TableCell>
                 <TableCell>{file.id}</TableCell>
                 <TableCell>{file.size}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => {
+                    onDownloadClick && onDownloadClick(file)
+                  }}>
+                    <DownloadIcon/>
+                  </IconButton>
+                </TableCell>
               </TableRow>
             );
           })}

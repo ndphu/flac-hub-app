@@ -23,7 +23,6 @@ class AccountTable extends React.Component {
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
-            <TableCell>Type</TableCell>
             <TableCell>Client Id</TableCell>
             <TableCell>Client Email</TableCell>
             <TableCell>Description</TableCell>
@@ -42,7 +41,6 @@ class AccountTable extends React.Component {
                 >
                   {account.name}
                 </TableCell>
-                <TableCell>{account.type}</TableCell>
                 <TableCell>{account.clientId}</TableCell>
                 <TableCell>{account.clientEmail}</TableCell>
                 <TableCell>{account.desc}</TableCell>

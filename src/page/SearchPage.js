@@ -99,6 +99,8 @@ class SearchPage extends React.Component {
 
     render = () => {
         const {tracks, hasMore, searchType, idx, loading} = this.state;
+        const trackList = tracks[searchType];
+        console.log("trackList", trackList);
         const {classes} = this.props;
         return (
             <div>
@@ -114,13 +116,11 @@ class SearchPage extends React.Component {
                         <Tab label={'Artist'}/>
                         {/*<Tab label={'Album'}/>*/}
                     </Tabs>
-                    <Divider/>
-
-                    {tracks[searchType] && tracks[searchType].length > 0 &&
+                    {trackList && trackList.length > 0 &&
                     <div>
                         <div hidden={searchType !== 'all'}>
                             <Hidden smUp implementation="css">
-                                <TrackList tracks={tracks[searchType]}/>
+                                <TrackList tracks={trackList}/>
                             </Hidden>
                             <Hidden xsDown implementation="css">
                                 <TrackListTable tracks={tracks[searchType]}
@@ -130,10 +130,10 @@ class SearchPage extends React.Component {
                         </div>
                         <div hidden={searchType !== 'artist'}>
                             <Hidden smUp implementation="css">
-                                <TrackList tracks={tracks[searchType]}/>
+                                <TrackList tracks={trackList}/>
                             </Hidden>
                             <Hidden xsDown implementation="css">
-                                <TrackListTable tracks={tracks[searchType]}
+                                <TrackListTable tracks={trackList}
                                                 tableTitle={`Search result for ${this.state.query}`}
                                                 editable={true}/>
                             </Hidden>

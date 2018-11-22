@@ -109,7 +109,7 @@ class TrackListTable extends React.Component {
     const playlist = {
       title: this.state.newPlaylistTitle,
       shared: "shared",
-      tracks: this.state.selected,
+      tracks: this.state.selected.map(t => t._id),
     };
     loader.show();
     playlistService.createPlaylist(playlist).then(created => {
@@ -154,8 +154,8 @@ class TrackListTable extends React.Component {
   };
 
   render = () => {
-    const {classes, tableTitle, editable} = this.props;
-    const {selected, newPlaylistTitle, loadingTracks, tracks} = this.state;
+    const {classes, tableTitle, editable, tracks} = this.props;
+    const {selected, newPlaylistTitle, loadingTracks} = this.state;
     return tracks ? (
       <div className={classes.root}>
         {editable && <EnhancedTableToolbar numSelected={selected.length}

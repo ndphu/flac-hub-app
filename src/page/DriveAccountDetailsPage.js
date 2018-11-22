@@ -33,6 +33,10 @@ class DriveAccountDetailsPage extends React.Component {
   };
 
   handleFileClick = (file) => {
+
+  };
+
+  handleDownloadClick = (file) => {
     accountService.getDownloadLink(this.state.account._id, file.id).then(resp => {
       const link = resp.link;
       console.log(resp);
@@ -82,7 +86,10 @@ class DriveAccountDetailsPage extends React.Component {
                           value={parseFloat(account.quota.percent)}
           />
           <div className={classes.spacing}/>
-          <DriveFileTable files={files} onRowClick={this.handleFileClick}/>
+          <DriveFileTable files={files}
+                          onRowClick={this.handleFileClick}
+                          onDownloadClick={this.handleDownloadClick}
+          />
         </div>
         }
       </Paper>

@@ -56,12 +56,12 @@ class PlaylistDetailsPage extends React.Component {
                             color={'primary'} >
                   {playlist.title}
                 </Typography>
-                <TrackListTable playlist={playlist} tracks={playlist.tracks}/>
+                <TrackListTable playlist={playlist} tracks={playlist.trackList}/>
               </Paper>
             </Hidden>
             <Hidden only={['lg', 'xl', 'md']} implementation={'css'}>
               <Paper square>
-                <TrackList tracks={playlist.tracks} playlist={playlist}/>
+                <TrackList tracks={playlist.trackList} playlist={playlist}/>
               </Paper>
             </Hidden>
           </div>
