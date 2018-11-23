@@ -7,6 +7,7 @@ import TableBody from '@material-ui/core/TableBody/TableBody';
 import Table from '@material-ui/core/Table/Table';
 import DownloadIcon from '@material-ui/icons/CloudDownload';
 import IconButton from '@material-ui/core/IconButton/IconButton';
+import {humanFileSize} from "../../utils/StringUtils";
 
 const styles = theme => ({
   tableRow: {
@@ -42,7 +43,7 @@ class DriveFileTable extends React.Component {
                   {file.name}
                 </TableCell>
                 <TableCell>{file.id}</TableCell>
-                <TableCell>{file.size}</TableCell>
+                <TableCell>{humanFileSize(file.size)}</TableCell>
                 <TableCell>
                   <IconButton onClick={() => {
                     onDownloadClick && onDownloadClick(file)

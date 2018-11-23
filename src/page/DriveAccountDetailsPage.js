@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
 import DriveFileTable from '../component/account/DriveFileTable';
 import api from '../api/Api';
+import {humanFileSize} from "../utils/StringUtils";
 
 const styles = theme => ({
   root: {
@@ -78,7 +79,7 @@ class DriveAccountDetailsPage extends React.Component {
           </Typography>
           <div className={classes.spacer}/>
           <Typography variant="body1" color={'textPrimary'}>
-            Usage: {quota.usage} / {quota.limit} ({quota.percent}%)
+            Usage: {humanFileSize(quota.usage)} / {humanFileSize(quota.limit)} ({quota.percent}%)
           </Typography>
           <div className={classes.spacer}/>
           <LinearProgress color={'secondary'}

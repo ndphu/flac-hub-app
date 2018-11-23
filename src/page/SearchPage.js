@@ -82,7 +82,7 @@ class SearchPage extends React.Component {
                 tracks,
                 page,
                 initialized,
-                hasMore: result.length >= 25,
+                hasMore: result ? result.length >= 25 : false,
                 loading: false,
             });
         })
@@ -100,7 +100,6 @@ class SearchPage extends React.Component {
     render = () => {
         const {tracks, hasMore, searchType, idx, loading} = this.state;
         const trackList = tracks[searchType];
-        console.log("trackList", trackList);
         const {classes} = this.props;
         return (
             <div>
