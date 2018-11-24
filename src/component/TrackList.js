@@ -4,7 +4,7 @@ import List from "@material-ui/core/List/List";
 import PropTypes from "prop-types";
 import TrackListItem from "./TrackListItem";
 import playService from '../service/PlayService';
-import itemService from '../service/ItemService';
+import trackService from '../service/TrackService';
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle';
 import Dialog from '@material-ui/core/Dialog/Dialog';
 import ListItem from '@material-ui/core/ListItem/ListItem';
@@ -35,7 +35,7 @@ class TrackList extends React.Component {
 
   handleDownloadClick = (track) => {
     track.loading = true;
-    itemService.getItemSources(track).then(sources => {
+    trackService.getItemSources(track).then(sources => {
       track.loading = false;
       this.setState({sources: sources, openDialog: true})
     })

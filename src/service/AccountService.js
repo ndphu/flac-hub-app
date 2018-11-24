@@ -23,8 +23,12 @@ class AccountService {
   };
 
   getDownloadLink = (id, fileId) => {
-    return api.get(`/manage/driveAccount/${id}/file/${fileId}/download`)
+    return api.get(`/manage/driveAccount/${id}/file/${fileId}/download`);
   };
+
+  refreshQuota = (id) => {
+    return api.get(`/manage/driveAccount/${id}/refreshQuota`);
+  }
 }
 
 

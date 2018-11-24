@@ -1,5 +1,5 @@
 import playlistService from "./PlaylistService";
-import itemService from "./ItemService";
+import trackService from "./TrackService";
 
 function generateRandom(min, max, except) {
   let num = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -11,7 +11,7 @@ class PlayService {
   currentPlaylist = null;
   currentIndex = 0;
   unsavedPlaylist = {
-    tracks: []
+    trackList: []
   };
   loopMode = 'all';
 
@@ -20,19 +20,18 @@ class PlayService {
   };
 
   playTrack = (track) => {
-    this.unsavedPlaylist.tracks.push(track);
-    itemService.getItemSources(track).then((sources) => {
+    this.unsavedPlaylist.trackList.push(track);
+    trackService.getItemSources(track).then((sources) => {
       track.sources = sources;
       this.player.playTrack(track);
     })
   };
 
   playTrackInPlaylist = (playlist, index) => {
-    console.log('playTrackInPlaylist', playlist, index);
     this.currentPlaylist = playlist;
     this.currentIndex = index;
-    this.currentTrack = this.currentPlaylist.tracks[this.currentIndex];
-    itemService.getItemSources(this.currentTrack).then((sources) => {
+    this.currentTrack = this.currentPlaylist.trackList[this.currentIndex];
+    trackService.getItemSources(this.currentTrack).then((sources) => {
       this.currentTrack.sources = sources;
       this.player.playTrack( this.currentTrack);
     });
@@ -98,10 +97,8 @@ class PlayService {
   };
 
   getSource = (track) => {
-    if (this.isHQPlayback())  {
-      return track.sources.filter(s => s.source.endsWith('mp3')).pop().source;
-    }
-    return track.sources[0].source;
+      let source = track.sources.filter(s => this.isHQPlayback() ? s.quality === '320kbps' : s.quality === '128kbps').pop();
+      return source.source
   };
 
   isHQPlayback = () => {

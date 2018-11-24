@@ -1,13 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Paper from '@material-ui/core/Paper/Paper';
 import accountService from '../service/AccountService';
 import Typography from '@material-ui/core/Typography/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
 import DriveFileTable from '../component/account/DriveFileTable';
-import api from '../api/Api';
 import {humanFileSize} from "../utils/StringUtils";
+import RefreshIcon from '@material-ui/icons/Refresh';
+import IconButton from '@material-ui/core/IconButton/IconButton';
+import downloadService from '../service/DownloadService';
 
 const styles = theme => ({
   root: {
@@ -18,6 +19,17 @@ const styles = theme => ({
   spacer: {
     marginTop: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 2,
+  },
+  quotaContainer: {
+    display: "flex",
+    alignItems: "center",
+    height: 56,
+  },
+  refreshQuotaButton: {
+    margin: theme.spacing.unit,
+  },
+  progress: {
+    margin: theme.spacing.unit,
   }
 });
 
@@ -40,18 +52,8 @@ class DriveAccountDetailsPage extends React.Component {
   handleDownloadClick = (file) => {
     accountService.getDownloadLink(this.state.account._id, file.id).then(resp => {
       const link = resp.link;
-      console.log(resp);
-      api.fetchBlob(link).then(buffer => {
-        const blob = new Blob([buffer], {type: "octet/stream"});
-        const url = window.URL.createObjectURL(blob);
-        console.log(url);
-        const dummyLink = document.createElement('a');
-        dummyLink.href = url;
-        dummyLink.download = file.name;
-        dummyLink.target = "__blank";
-        dummyLink.click();
-      })
-    })
+      downloadService.downloadDriveFile(file.name, link);
+    });
   };
 
   load = () => {
@@ -65,11 +67,19 @@ class DriveAccountDetailsPage extends React.Component {
       })
   };
 
+  refreshQuota = () => {
+    this.setState({refreshingQuota: true});
+    accountService.refreshQuota(this.props.match.params.id)
+      .then(account => {
+        this.setState({account, refreshingQuota: false});
+      }).catch(() => {
+      this.setState({refreshingQuota: false});
+    });
+  };
+
   render = () => {
     const {classes} = this.props;
-    const {account, files} = this.state;
-    const quota = account ? account.quota : null;
-
+    const {account, files, refreshingQuota} = this.state;
     return (
       <Paper className={classes.root} elevation={1} square={true}>
         {account &&
@@ -78,13 +88,26 @@ class DriveAccountDetailsPage extends React.Component {
             {account.name}
           </Typography>
           <div className={classes.spacer}/>
-          <Typography variant="body1" color={'textPrimary'}>
-            Usage: {humanFileSize(quota.usage)} / {humanFileSize(quota.limit)} ({quota.percent}%)
-          </Typography>
+          <div className={classes.quotaContainer}>
+            {!refreshingQuota ? <Typography variant="subtitle1" color={'textPrimary'}>
+              Usage: {humanFileSize(account.usage)} / {humanFileSize(account.limit)}
+            </Typography> : <Typography variant="subtitle1" color={'textPrimary'}>
+              Refreshing...
+            </Typography>
+            }
+
+            {!refreshingQuota &&
+            <IconButton color={'secondary'}
+                        onClick={this.refreshQuota}
+            >
+              <RefreshIcon/>
+            </IconButton>
+            }
+          </div>
           <div className={classes.spacer}/>
           <LinearProgress color={'secondary'}
                           variant={'determinate'}
-                          value={parseFloat(account.quota.percent)}
+                          value={parseFloat(account.usage * 100 / account.limit)}
           />
           <div className={classes.spacing}/>
           <DriveFileTable files={files}

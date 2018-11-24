@@ -102,7 +102,6 @@ class PlayerComponent extends React.Component {
   };
 
   onCanPlay = () => {
-    console.log('can play');
     this.setState({duration: this.audioEl.duration})
   };
 

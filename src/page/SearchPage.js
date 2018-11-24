@@ -51,7 +51,6 @@ class SearchPage extends React.Component {
     };
 
     onLoadMoreClick = () => {
-        console.log(this.state);
         this.search(this.state.query,
             this.state.page[this.state.searchType] + 1,
             this.state.searchType);

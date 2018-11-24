@@ -5,6 +5,7 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import withStyles from "@material-ui/core/styles/withStyles";
+import {humanFileSize} from '../../utils/StringUtils';
 
 
 const styles = theme => ({
@@ -25,7 +26,8 @@ class AccountTable extends React.Component {
             <TableCell>Name</TableCell>
             <TableCell>Client Id</TableCell>
             <TableCell>Client Email</TableCell>
-            <TableCell>Description</TableCell>
+            <TableCell>Usage</TableCell>
+            <TableCell>Limit</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -43,7 +45,8 @@ class AccountTable extends React.Component {
                 </TableCell>
                 <TableCell>{account.clientId}</TableCell>
                 <TableCell>{account.clientEmail}</TableCell>
-                <TableCell>{account.desc}</TableCell>
+                <TableCell>{humanFileSize(account.usage)}</TableCell>
+                <TableCell>{humanFileSize(account.limit)}</TableCell>
               </TableRow>
             );
           })}

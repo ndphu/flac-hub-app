@@ -39,6 +39,10 @@ class NavigationService {
   goToManageDriveAccount() {
     this.history.push(`/manage/driveAccount`)
   }
+
+  goToDownloadPage() {
+    this.history.push(`/download`)
+  }
 }
 
 const navigationService = new NavigationService();

@@ -22,7 +22,7 @@ import playService from '../service/PlayService';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Typography from '@material-ui/core/Typography/Typography';
 import DownloadIcon from '@material-ui/icons/CloudDownload';
-import itemService from '../service/ItemService';
+import trackService from '../service/TrackService';
 import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
 import Select from '@material-ui/core/Select/Select';
 
@@ -118,7 +118,6 @@ class TrackListTable extends React.Component {
         };
         loader.show();
         playlistService.createPlaylist(playlist).then(created => {
-            console.log(created);
             loader.hide();
         })
     };
@@ -134,7 +133,7 @@ class TrackListTable extends React.Component {
     handleDownloadTrack = (track, idx) => {
         this.state.loadingTracks[track.link] = true;
         this.setState({loadingTracks: this.state.loadingTracks})
-        itemService.getItemSources(track).then(sources => {
+        trackService.getItemSources(track).then(sources => {
             this.state.tracks[idx].sources = sources;
             this.state.loadingTracks[track.link] = false;
             this.setState({tracks: this.state.tracks, loadingTracks: this.state.loadingTracks});
