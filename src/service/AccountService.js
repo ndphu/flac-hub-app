@@ -2,8 +2,10 @@ import api from "../api/Api";
 
 
 class AccountService {
-  getDriveAccounts = () => {
-    return api.get("/manage/driveAccount")
+  getDriveAccounts = (page, size) => {
+    if (!page) page = 1;
+    if (!size) size = 10;
+    return api.get(`/manage/driveAccount?page=${page}&size=${size}`)
   };
 
   createAccount = (account) => {

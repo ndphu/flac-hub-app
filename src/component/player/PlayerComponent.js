@@ -64,7 +64,7 @@ const styles = theme => ({
   },
 
   slider: {
-    paddingLeft: 4
+    paddingTop: 2,
   },
 
   playButton: {

@@ -51,12 +51,16 @@ class PlayService {
 
   next = () => {
     if (this.shuffle) {
-      const nextIndex = generateRandom(0, this.currentPlaylist.tracks.length - 1, this.currentIndex);
-      this.playTrackInPlaylist(this.currentPlaylist, nextIndex);
+      if (this.currentPlaylist.trackList && this.currentPlaylist.trackList.length > 0) {
+        const nextIndex = generateRandom(0, this.currentPlaylist.trackList.length - 1, this.currentIndex);
+        this.playTrackInPlaylist(this.currentPlaylist, nextIndex);
+      }
     } else {
-      this.currentIndex ++;
-      if (this.currentIndex >= this.currentPlaylist.tracks.length) {
-        this.currentIndex = 0;
+      if (this.currentPlaylist.trackList && this.currentPlaylist.trackList.length > 0) {
+        this.currentIndex ++;
+        if (this.currentIndex >= this.currentPlaylist.tracks.length) {
+          this.currentIndex = 0;
+        }
       }
 
       this.playTrackInPlaylist(this.currentPlaylist, this.currentIndex);
@@ -98,6 +102,9 @@ class PlayService {
 
   getSource = (track) => {
       let source = track.sources.filter(s => this.isHQPlayback() ? s.quality === '320kbps' : s.quality === '128kbps').pop();
+      if (!source) {
+        source = track.sources[0];
+      }
       return source.source
   };
 

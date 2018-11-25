@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import CardActions from '@material-ui/core/CardActions/CardActions';
 import Button from '@material-ui/core/Button/Button';
 import playService from '../../service/PlayService';
+import playlistService from '../../service/PlaylistService';
 
 const styles = {
   card: {
@@ -20,6 +21,14 @@ const styles = {
 };
 
 class PlaylistCard extends React.Component {
+
+  handleListenClick = () => {
+    playlistService.getPlaylist(this.props.playlist._id).then((playlist) => {
+      playService.playTrackInPlaylist(playlist, 0)
+    });
+  };
+
+
   render = () => {
     const {playlist, classes, onPlaylistCardClick} = this.props;
     return (
@@ -29,8 +38,10 @@ class PlaylistCard extends React.Component {
                       color="primary"
                       className={classes.title}
                       noWrap
-                      onClick={() => {onPlaylistCardClick(playlist)}}
-            >
+                      onClick={() => {
+                        onPlaylistCardClick(playlist)
+                      }}
+          >
             {playlist.title}
           </Typography>
           <Typography className={classes.pos} color="textSecondary">
@@ -39,9 +50,7 @@ class PlaylistCard extends React.Component {
         </CardContent>
         <CardActions>
           <Button size="small" color={'secondary'}
-                  onClick={() => {
-                    playService.playTrackInPlaylist(playlist, 0)
-                  }}
+                  onClick={this.handleListenClick}
           >
             Listen
           </Button>

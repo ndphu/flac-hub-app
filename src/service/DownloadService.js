@@ -68,6 +68,51 @@ class DownloadService {
   getDownload = (id) => {
     return this.downloads[id];
   };
+
+  downloadSource = (source) => {
+    const downloadGuid = guid();
+    this.downloads[downloadGuid] = {
+      id: downloadGuid,
+      fileName: source.fileName,
+      url: source.source,
+      completed: false,
+      current: 0,
+      total: 0,
+    };
+    this.downloadIds.push(downloadGuid);
+
+    this.startDownload(downloadGuid);
+  };
+
+  downloadSources = (sources) => {
+    sources.forEach((s) => {
+      this.downloadSource(s)
+    });
+  };
+
+  startDownload = (uuid) => {
+    const download = this.downloads[uuid];
+    new MultipartDownload()
+      .start(download.url, {
+        numOfConnections: 8,
+        writeToBuffer: true,
+        forceParallel: true,
+      })
+      .on('progress', (current, total) => {
+        download.current = current;
+        download.total = total;
+      })
+      .on('end', (data) => {
+        download.completed = true;
+        const blob = new Blob([data], {type: "octet/stream"});
+        const url = window.URL.createObjectURL(blob);
+        const dummyLink = document.createElement('a');
+        dummyLink.href = url;
+        dummyLink.download = download.fileName;
+        dummyLink.target = "__blank";
+        dummyLink.click();
+      })
+  }
 }
 
 const downloadService = new DownloadService();

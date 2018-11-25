@@ -58,7 +58,8 @@ class DownloadPage extends React.Component {
             <Card key={download.id} className={classes.cardItem}>
               <CardContent>
                 <Typography gutterBottom
-                            variant="body2">
+                            color={'primary'}
+                            variant="subtitle1">
                   {download.fileName}
                 </Typography>
                 <Typography variant={'caption'}

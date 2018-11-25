@@ -5,9 +5,12 @@ import Typography from "@material-ui/core/Typography/Typography";
 import AccountTable from "../component/account/AccountTable";
 import accountService from "../service/AccountService";
 import Button from "@material-ui/core/Button/Button";
-import Divider from "@material-ui/core/Divider/Divider";
-import CreateAccountDialog from "../component/account/CreateAccountDialog";
 import navigationService from '../service/NavigationService';
+import CreateAccount from '../component/account/CreateAccount';
+import TableRow from '@material-ui/core/TableRow/TableRow';
+import TablePagination from '@material-ui/core/TablePagination/TablePagination';
+import TableFooter from '@material-ui/core/TableFooter/TableFooter';
+import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
 
 
 const styles = theme => ({
@@ -20,6 +23,9 @@ const styles = theme => ({
     ...theme.mixins.gutters(),
     marginTop: 8,
     marginBottom: 8,
+  },
+  footer: {
+    width: "100%"
   }
 });
 
@@ -28,14 +34,27 @@ class DriveAccountPage extends React.Component {
   state = {
     accounts: [],
     openCreateAccountDialog: false,
+    page: 0,
+    rowsPerPage: 10,
+    totalAccount: 0,
+    loading: false,
   };
 
   componentDidMount = () => {
-    accountService.getDriveAccounts().then(accounts => this.setState({accounts}))
+    this.setState({loading: true});
+    accountService.getDriveAccounts(this.state.page + 1, this.state.rowsPerPage)
+      .then(resp => this.setState(
+        {
+          accounts: resp.accounts,
+          totalAccount: resp.total,
+          page: resp.page - 1,
+          rowsPerPage: resp.size,
+          loading: false,
+        }))
   };
 
   handleCreateAccountDialogClose = () => {
-    this.setState({openCreateAccountDialog: false})
+    this.setState({openCreateAccountDialog: false});
     accountService.getDriveAccounts().then(accounts => this.setState({accounts}))
   };
 
@@ -43,9 +62,34 @@ class DriveAccountPage extends React.Component {
     navigationService.goToAccount(account._id)
   };
 
+  handleChangePage = (e, page) => {
+    this.setState({loading: true});
+    accountService.getDriveAccounts(page + 1, this.state.rowsPerPage)
+      .then(resp => this.setState({
+        accounts: resp.accounts,
+        totalAccount: resp.total,
+        page: resp.page - 1,
+        rowsPerPage: resp.size,
+        loading: false,
+      }))
+  };
+
+  handleChangeRowsPerPage = (event) => {
+    this.setState({loading: true});
+    const rowsPerPage = parseInt(event.target.value);
+    accountService.getDriveAccounts(1, rowsPerPage)
+      .then(resp => this.setState({
+        accounts: resp.accounts,
+        totalAccount: resp.total,
+        page: resp.page - 1,
+        rowsPerPage: resp.size,
+        loading: false,
+      }))
+  };
+
   render = () => {
     const {classes} = this.props;
-    const {accounts, openCreateAccountDialog} = this.state;
+    const {accounts, openCreateAccountDialog, rowsPerPage, page, totalAccount, loading} = this.state;
 
     return (
       <Paper className={classes.root} elevation={1} square={true}>
@@ -57,6 +101,19 @@ class DriveAccountPage extends React.Component {
                       onRowClick={this.handleRowClick}
         />
         }
+        <TableFooter className={classes.footer}>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              count={totalAccount}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={this.handleChangePage}
+              onChangeRowsPerPage={this.handleChangeRowsPerPage}
+            />
+          </TableRow>
+        </TableFooter>
+        {loading && <LinearProgress/>}
         <div className={classes.divider}/>
         <Button variant={"contained"}
                 color={"primary"}
@@ -66,8 +123,8 @@ class DriveAccountPage extends React.Component {
           Add
         </Button>
         {openCreateAccountDialog &&
-        <CreateAccountDialog open={openCreateAccountDialog}
-                             handleClose={this.handleCreateAccountDialogClose}
+        <CreateAccount open={openCreateAccountDialog}
+                       handleClose={this.handleCreateAccountDialogClose}
         />}
       </Paper>
     )
