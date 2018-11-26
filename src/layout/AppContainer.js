@@ -143,7 +143,7 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: '0 8px',
-    ...theme.mixins.toolbar,
+    ...theme.mixins.toolbar.dense,
   },
 
   hide: {
@@ -202,7 +202,8 @@ class AppContainer extends React.Component {
             [classes.appBarShift]: this.state.open,
           })}
         >
-          <Toolbar disableGutters={!this.state.open}>
+          <Toolbar disableGutters={!this.state.open}
+            variant={'dense'}>
             <IconButton
               color="inherit"
               aria-label="Open drawer"
@@ -255,7 +256,7 @@ class AppContainer extends React.Component {
           {drawer}
         </Drawer>
         <main className={classes.content}>
-          <div className={classes.toolbar}/>
+          <div className={classes.toolbar} style={{height: 48}}/>
           {this.props.children}
         </main>
         <Paper className={classes.playerSmall}

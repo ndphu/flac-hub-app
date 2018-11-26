@@ -11,16 +11,11 @@ import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
 
 const styles = theme => ({
   root: {
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-  },
-
-  card: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
   },
+
 });
 
 class PlaylistDetailsPage extends React.Component {
@@ -46,28 +41,23 @@ class PlaylistDetailsPage extends React.Component {
     const {classes} = this.props;
     const {playlist, loading} = this.state;
     return (
-      <div className={classes.root}>
+      <Paper className={classes.root}>
         {loading && <LinearProgress/>}
         {playlist && (
           <div>
             <Hidden only={['sm', 'xs']} implementation={'css'}>
-              <Paper className={classes.card} square>
-                <Typography variant="title"
-                            color={'primary'} >
-                  {playlist.title}
-                </Typography>
-                <TrackListTable playlist={playlist} tracks={playlist.trackList}/>
-              </Paper>
+              <Typography variant="h5" component="h3" color={"primary"}>
+                {playlist.title}
+              </Typography>
+              <TrackListTable playlist={playlist} tracks={playlist.trackList}/>
             </Hidden>
             <Hidden only={['lg', 'xl', 'md']} implementation={'css'}>
-              <Paper square>
-                <TrackList tracks={playlist.trackList} playlist={playlist}/>
-              </Paper>
+              <TrackList tracks={playlist.trackList} playlist={playlist}/>
             </Hidden>
           </div>
         )
         }
-      </div>
+      </Paper>
     )
   }
 }
