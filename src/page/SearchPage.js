@@ -112,7 +112,7 @@ class SearchPage extends React.Component {
                     >
                         <Tab label={'All'}/>
                         <Tab label={'Artist'}/>
-                        {/*<Tab label={'Album'}/>*/}
+                        <Tab label={'Album'}/>
                     </Tabs>
                     {trackList && trackList.length > 0 &&
                     <div>
@@ -135,6 +135,8 @@ class SearchPage extends React.Component {
                                                 tableTitle={`Search result for ${this.state.query}`}
                                                 editable={true}/>
                             </Hidden>
+                        </div>
+                        <div hidden={searchType !== 'album'}>
                         </div>
                     </div>
                     }

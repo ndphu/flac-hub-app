@@ -1,4 +1,7 @@
 class NavigationService {
+
+  recentSearches = []
+
   setLocation = (location) => {
     this.location = location;
   };
@@ -7,26 +10,19 @@ class NavigationService {
     this.history = history;
   };
 
-  goToSearch(query) {
+  goToSearch = (query) => {
+    this.recentSearches.push(query);
     this.history.push(`/search/q/${query}`);
 
-  }
-  
-  goToArtistSearch(query) {
-    if (query) {
-      this.history.push(`/search/byArtist/${encodeURIComponent(query)}`);
-    } else {
-      this.history.push('/search/byArtist');
-    }
-  }
+  };
 
-  goToPlaylist(id) {
+  goToPlaylist = (id) => {
     if (id) {
       this.history.push(`/playlist/${id}`)
     } else {
       this.history.push(`/playlist`)
     }
-  }
+  };
 
   goToSettingsPage = () => {
     this.history.push(`/settings`)
@@ -36,12 +32,28 @@ class NavigationService {
     this.history.push(`/manage/driveAccount/${id}`)
   };
 
-  goToManageDriveAccount() {
+  goToManageDriveAccount = () => {
     this.history.push(`/manage/driveAccount`)
-  }
+  };
 
-  goToDownloadPage() {
+  goToDownloadPage = () => {
     this.history.push(`/download`)
+  };
+
+  goToAlbums = () => {
+    this.history.push(`/albums`)
+  };
+
+  goToArtist = () => {
+    this.history.push(`/artists`)
+  };
+
+  goToLastSearch = () => {
+    if (this.recentSearches.length === 0) {
+      this.goToSearch("queen")
+    } else {
+      this.goToSearch(this.recentSearches[this.recentSearches.length - 1])
+    }
   }
 }
 

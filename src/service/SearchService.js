@@ -14,7 +14,7 @@ class SearchService {
   };
 
   searchByAlbum = (query, page) => {
-    return api.get(`/search/byAlbum/${btoa(unescape(encodeURIComponent(query)))}/tracks?page=${page}`)
+    return api.get(`/search/q/${btoa(unescape(encodeURIComponent(query)))}/album?page=${page}`)
   };
 }
 
