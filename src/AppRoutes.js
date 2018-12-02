@@ -7,6 +7,7 @@ import DriveAccountPage from "./page/DriveAccountPage";
 import DriveAccountDetailsPage from './page/DriveAccountDetailsPage';
 import DownloadPage from './page/DownloadPage';
 import AlbumsPage from './page/AlbumsPage';
+import AlbumDetailsPage from './page/AlbumDetailsPage';
 
 const AppRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
       <Route path={'/manage/driveAccount/:id'} component={DriveAccountDetailsPage}/>
       <Route path={'/manage/driveAccount'} component={DriveAccountPage}/>
       <Route path={'/download'} component={DownloadPage}/>
+      <Route path={'/album/:id'} component={AlbumDetailsPage}/>
       <Route path={'/albums'} component={AlbumsPage}/>
       <Redirect exact={true} from={'/'} to={'/playlist'}/>
     </Switch>

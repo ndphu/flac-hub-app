@@ -55,6 +55,10 @@ class NavigationService {
       this.goToSearch(this.recentSearches[this.recentSearches.length - 1])
     }
   }
+
+  goToAlbum = (id) => {
+    this.history.push(`/album/${id}`)
+  }
 }
 
 const navigationService = new NavigationService();
