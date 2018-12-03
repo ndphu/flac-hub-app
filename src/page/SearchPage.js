@@ -16,6 +16,10 @@ const styles = theme => ({
     root: {
         flexGrow: 1,
     },
+    paper: {
+        padding: theme.spacing.unit,
+        marginTop: theme.spacing.unit * 2,
+    }
 });
 
 const searchTypes = ['all', 'artist', 'album'];
@@ -101,20 +105,19 @@ class SearchPage extends React.Component {
         const trackList = tracks[searchType];
         const {classes} = this.props;
         return (
-            <div>
-                <Paper className={classes.root}>
-                    {loading && <LinearProgress/>}
-                    <Tabs
-                        value={idx}
-                        onChange={this.handleTabChange}
-                        indicatorColor="secondary"
-                        textColor="secondary"
-                    >
-                        <Tab label={'All'}/>
-                        <Tab label={'Artist'}/>
-                        <Tab label={'Album'}/>
-                    </Tabs>
-                    {trackList && trackList.length > 0 &&
+            <div className={classes.root}>
+                <Tabs
+                    value={idx}
+                    onChange={this.handleTabChange}
+                    indicatorColor="secondary"
+                    textColor="secondary"
+                >
+                    <Tab label={'All'}/>
+                    <Tab label={'Artist'}/>
+                    <Tab label={'Album'}/>
+                </Tabs>
+                {trackList && trackList.length > 0 &&
+                <Paper className={classes.paper}>
                     <div>
                         <div hidden={searchType !== 'all'}>
                             <Hidden smUp implementation="css">
@@ -139,9 +142,10 @@ class SearchPage extends React.Component {
                         <div hidden={searchType !== 'album'}>
                         </div>
                     </div>
-                    }
-
                 </Paper>
+                }
+
+                {loading && <LinearProgress/>}
                 {hasMore &&
                 <Button variant={'contained'}
                         style={{marginTop: 16, marginBottom: 16}}

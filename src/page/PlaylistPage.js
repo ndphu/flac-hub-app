@@ -14,10 +14,11 @@ import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
 
 
 const styles = theme => ({
-  root: {
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-  }
+    root: {
+        ...theme.mixins.gutters(),
+        paddingTop: theme.spacing.unit * 2,
+        paddingBottom: theme.spacing.unit * 2,
+    },
 });
 
 class PlaylistPage extends React.Component {
