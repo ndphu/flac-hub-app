@@ -17,7 +17,7 @@ class PlayService {
     };
 
     setTrackList = (trackList) => {
-        this.trackList = trackList.slice(0);
+        this.tracks = trackList.slice(0);
     };
 
     playTrack = (trackId) => {
@@ -30,41 +30,40 @@ class PlayService {
         })
     };
 
-    playTrackInPlaylist = (playlist, index) => {
-        this.currentPlaylist = playlist;
-        this.currentIndex = index;
-        this.currentTrack = this.currentPlaylist.trackList[this.currentIndex];
-        trackService.getItemSources(this.currentTrack).then((sources) => {
-            this.currentTrack.sources = sources;
-            this.player.playTrack(this.currentTrack);
-        });
+    playTrackByIndex = (idx) => {
+        if (idx >= 0) {
+            this.index = idx;
+        }
+        trackService.getItemSources(this.tracks[this.index]).then((sources) => {
+            this.tracks[this.index].sources = sources;
+            this.player.playTrack(this.tracks[this.index]);
+        })
     };
 
     next = () => {
         if (this.shuffle) {
-            if (this.currentPlaylist.trackList && this.currentPlaylist.trackList.length > 0) {
-                const nextIndex = generateRandom(0, this.currentPlaylist.trackList.length - 1, this.currentIndex);
-                this.playTrackInPlaylist(this.currentPlaylist, nextIndex);
+            if (this.tracks && this.tracks.length > 0) {
+                const nextIndex = generateRandom(0, this.tracks.length - 1, this.index);
+                this.playTrackByIndex(nextIndex);
             }
         } else {
-            if (this.currentPlaylist.trackList && this.currentPlaylist.trackList.length > 0) {
-                this.currentIndex++;
-                if (this.currentIndex >= this.currentPlaylist.tracks.length) {
-                    this.currentIndex = 0;
+            if (this.tracks && this.tracks.length > 0) {
+                this.index++;
+                if (this.index >= this.tracks.length) {
+                    this.index = 0;
                 }
+                this.playTrackByIndex();
             }
-
-            this.playTrackInPlaylist(this.currentPlaylist, this.currentIndex);
         }
     };
 
     prev = () => {
-        this.currentIndex--;
-        if (this.currentIndex < 0) {
-            this.currentIndex = this.currentPlaylist.tracks.length - 1;
+        this.index--;
+        if (this.index < 0) {
+            this.index = this.tracks.length - 1;
         }
 
-        this.playTrackInPlaylist(this.currentPlaylist, this.currentIndex);
+        this.playTrackByIndex();
     };
 
     setLoopMode = (mode) => {

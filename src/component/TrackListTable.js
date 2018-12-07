@@ -153,7 +153,8 @@ class TrackListTable extends React.Component {
     if (this.props.playlist) {
       playService.playTrackInPlaylist(this.props.playlist, index);
     } else {
-      playService.playTrack(track);
+      playService.setTrackList(this.props.tracks);
+      playService.playTrack(track._id);
     }
   };
 

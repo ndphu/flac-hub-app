@@ -34,6 +34,7 @@ class AlbumDetailsPage extends React.Component {
     const {album} = this.state;
     return (
       <div className={classes.root}>
+
         {album && album.trackList &&
         <Paper className={classes.paper}>
           <TrackListTable tracks={album.trackList}/>
