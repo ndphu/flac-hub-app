@@ -6,8 +6,8 @@ const apiConfig = {
   // baseUrl: 'https://csn-api-beta.cfapps.io/api',
   // contentBaseUrl: 'https://csn-api-beta.cfapps.io/api/content',
 
-   baseUrl: 'http://localhost:9900/api',
-   contentBaseUrl: 'http://localhost:9900/api/content',
+   baseUrl: 'http://localhost:8080/api',
+   contentBaseUrl: 'http://localhost:8080/api/content',
   //
   loginRedirectUrl: 'http://localhost:3000/pfm/login',
   unauthorizedPath: '/gm/unauthorized',

@@ -19,14 +19,25 @@ import RepeatIcon from '@material-ui/icons/Repeat';
 import Hidden from '@material-ui/core/Hidden/Hidden';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import Menu from '@material-ui/core/Menu/Menu';
+import contentService from '../../service/ContentService';
 
 const styles = theme => ({
   container: {},
-  details: {
+  trackInfo: {
     display: 'flex',
-    flexDirection: 'column',
+  },
+  albumArt: {
+    width: 72,
+    maxWidth: 72,
+    minWidth: 72,
+    height: 72,
+    maxHeight: 72,
+    minHeight: 72,
+    margin: theme.spacing.unit,
   },
   content: {
+    display: 'flex',
+    flexDirection: 'column',
     flex: '1 0 auto',
     padding: theme.spacing.unit,
     margin: theme.spacing.unit,
@@ -253,7 +264,9 @@ class PlayerComponent extends React.Component {
           <div className={classes.container}>
             <GridList cols={3}>
               <GridListTile cols={1}>
-                <div className={classes.details}>
+                <div className={classes.trackInfo}>
+                  <img className={classes.albumArt}
+                       src={track ? contentService.getTrackAlbumArt(track._id) : ""}/>
                   <div className={classes.content}>
                     <Typography variant="title" noWrap color={'primary'}>
                       {track ? track.title : 'No Track To Play'}

@@ -150,12 +150,8 @@ class TrackListTable extends React.Component {
   };
 
   playTrackClick = (e, track, index) => {
-    if (this.props.playlist) {
-      playService.playTrackInPlaylist(this.props.playlist, index);
-    } else {
-      playService.setTrackList(this.props.tracks);
-      playService.playTrack(track._id);
-    }
+    playService.setTrackList(this.props.tracks);
+    playService.playTrack(track._id);
   };
 
   handlePlaylistNameKeyUp = (e) => {
@@ -238,7 +234,9 @@ class TrackListTable extends React.Component {
                       {(track.sources && track.sources.length) ? (
                         <Select
                           native
-                          onChange={(e) => {downloadService.downloadSources(track.sources.filter(s=>s._id === e.target.value))}}
+                          onChange={(e) => {
+                            downloadService.downloadSources(track.sources.filter(s => s._id === e.target.value))
+                          }}
                         >
                           <option/>
                           {track.sources.map((s) => {
