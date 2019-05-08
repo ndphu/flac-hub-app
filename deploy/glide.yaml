@@ -1,0 +1,4 @@
+package: lossless-search-ui
+import:
+- package: github.com/gin-gonic/gin
+  version: ^1.2.0

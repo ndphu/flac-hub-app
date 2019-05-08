@@ -1,0 +1,8 @@
+---
+applications:
+- name: lossless-search-ui
+  memory: 16M
+  instances: 1
+  command: lossless-search-ui
+  random-route: true
+
