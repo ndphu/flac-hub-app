@@ -1,28 +1,31 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import SearchPage from "./page/SearchPage";
+import navigationService from "./service/NavigationService";
+import {HashRouter, Redirect, Route, Switch} from "react-router-dom";
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    state = {};
+
+    render() {
+        return (
+            <div className="App">
+                <HashRouter>
+                    <Route path={'/'} render={(props) => {
+                        navigationService.setLocation(props.location);
+                        navigationService.setHistory(props.history);
+                        return (
+                            <Switch>
+                                <Route path={'/search'} component={SearchPage}/>
+                                <Redirect exact={true} from={'/'} to={`/search`}/>
+                            </Switch>
+                        )
+                    }}/>
+                </HashRouter>
+
+            </div>
+        );
+    }
 }
 
 export default App;
